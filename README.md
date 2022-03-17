@@ -83,7 +83,7 @@ The app also has autherization too, so that specific user will have a specific p
 
 
 	|-------------------------------+----------------------------------------------|---------------------------------|
-	| Userstory                     | Authentication                               | Autherization		         |
+	| Actions                       | Authentication                               | Autherization		         |
 	|                               |                                              |                                 |
 	|-------------------------------+----------------------------------------------+---------------------------------|
 	| Delete Company                | Authenticated                                | Admin only	                 |
