@@ -20,17 +20,17 @@
 ## About The App
 <pre>
 Our project is a job vacancy Mobile App with flutter that allow
-	1, The company to post the job
+	1, The organization to post the job
 	2, The jobseeker to visit the job vacancy
-	3, The admin will verify the company
-	4, The admin will controll the  action of companies and the jobseekers
+	3, The admin will verify the organization
+	4, The admin will controll the  action of organizationies and the jobseekers
 </pre>
 
 ## User Types
 
 <pre>
 	1. Admin
-	2. Company
+	2. Organization
 	3. Jobseeker
 </pre>
 
@@ -38,10 +38,11 @@ Our project is a job vacancy Mobile App with flutter that allow
 ## Business Features
 
 <pre>
-	1, Allow the company to post the job. CRUD operation: create job ["POST"], read jobs ["GET"], update job ["PUT"]
+	1, Allow the organization to post the job. CRUD operation: create job ["POST"], read jobs ["GET"], update job ["PUT"]
 	   and delete job ["DELETE"]
-	2, Allow the jobseekers to view jobs, follow the company so that they get the job posted by that company, unfollow 
-	   company. CRUD operation: follow the company ["POST"],  view jobs ["GET"],  unfolllow the company ["DELETE"]
+	2, Allow the jobseekers to view jobs, follow the organization so that they get the job posted by that organization, unfollow 
+	   organization. CRUD operation: follow the company ["POST"],  view jobs ["GET"],  unfolllow the company ["DELETE"] and
+	   update the profile of the jobseeker ["UPDATE"]
 </pre>
       
 
@@ -61,16 +62,16 @@ Our project is a job vacancy Mobile App with flutter that allow
 	|---------------+----------------------------------------------|
 	| Role     	|       	Action	                       |
 	|---------------+----------------------------------------------|
-	| Admin         | Controll the company and the job seeeker     |
+	| Admin         | Controll the organization and the job seeeker|
 	|---------------+----------------------------------------------|
-	| Company       | Post Job                                     |
+	| organization  | Post Job                                     |
 	|		| View Jobs                        `	       |
 	|               | Update Job                                   |
 	|               | Delete Job                                   |
 	|---------------+----------------------------------------------|
 	| Jobseeker     | View posted jobs                             |
-	|               | Unfollow the company                         |
-	| 		| Follow the company                           |
+	|               | Unfollow the organization                    |
+	| 		| Follow the organization                      |
 	|---------------+----------------------------------------------|
 	
 </pre>
@@ -86,22 +87,22 @@ The app also has autherization too, so that specific user will have a specific p
 	| Actions                       | Authentication                               | Autherization		         |
 	|                               |                                              |                                 |
 	|-------------------------------+----------------------------------------------+---------------------------------|
-	| Delete Company                | Authenticated                                | Admin only	                 |
+	| Delete organization           | Authenticated                                | Admin only	                 |
 	|-------------------------------+----------------------------------------------+---------------------------------|
 	| Delete Jobseeker              | Authenticated                                | Admin only                      |
 	|-------------------------------+----------------------------------------------+---------------------------------|
-	| Post Job			| Authenticated                                | Company only                    |
+	| Post Job			| Authenticated                                | organization only               |
 	|-------------------------------+----------------------------------------------+---------------------------------|
-	| Update Job			| Authenticated                                | The Company that post the job   |
+	| Update Job			| Authenticated                                |The organization that post the job|
 	|-------------------------------+----------------------------------------------+---------------------------------|
-	| Delete Job                    | Authenticated                                | The Company that post the job   |
-	|                               |                                              | or Admin                        |
+	| Delete Job                    | Authenticated                                | The organization that post      |
+	|                               |                                              | the job or Admin                |
 	|-------------------------------+----------------------------------------------+---------------------------------|
 	| View Jobs                     | Anybody                                      | Anybody                         |
 	|-------------------------------+----------------------------------------------+---------------------------------|
-	| Follow the company            | Authenticated                                | Jobseeker only                  |
+	| Follow the organization       | Authenticated                                | Jobseeker only                  |
 	|-------------------------------+----------------------------------------------+---------------------------------|
-	| Unfollow the company          | Authenticated                                | Jobseeker only                  |
+	| Unfollow the organization     | Authenticated                                | Jobseeker only                  |
 	|-------------------------------+----------------------------------------------+---------------------------------|
 
 
