@@ -59,18 +59,18 @@ Our project is a job vacancy Mobile App with flutter that allow
 
 <pre>
 	|---------------+----------------------------------------------|
-	| Role     	    |       	Action	                             |
+	| Role     	|       	Action	                       |
 	|---------------+----------------------------------------------|
 	| Admin         | Controll the company and the job seeeker     |
 	|---------------+----------------------------------------------|
 	| Company       | Post Job                                     |
-	|		            | View Jobs                                    |
+	|		| View Jobs                        `	       |
 	|               | Update Job                                   |
 	|               | Delete Job                                   |
 	|---------------+----------------------------------------------|
 	| Jobseeker     | View posted jobs                             |
 	|               | Unfollow the company                         |
-	| 		          | Follow the company                           |
+	| 		| Follow the company                           |
 	|---------------+----------------------------------------------|
 	
 </pre>
@@ -83,16 +83,16 @@ The app also has autherization too, so that specific user will have a specific p
 
 
 	|-------------------------------+----------------------------------------------|---------------------------------|
-	| Userstory                     | Authentication                               | Autherization		               |
+	| Userstory                     | Authentication                               | Autherization		         |
 	|                               |                                              |                                 |
 	|-------------------------------+----------------------------------------------+---------------------------------|
-	| Delete Company                | Authenticated                                | Admin only		                   |
+	| Delete Company                | Authenticated                                | Admin only	                 |
 	|-------------------------------+----------------------------------------------+---------------------------------|
 	| Delete Jobseeker              | Authenticated                                | Admin only                      |
 	|-------------------------------+----------------------------------------------+---------------------------------|
-	| Post Job			                | Authenticated                                | Company only                    |
+	| Post Job			| Authenticated                                | Company only                    |
 	|-------------------------------+----------------------------------------------+---------------------------------|
-	| Update Job			              | Authenticated                                | The Company that post the job   |
+	| Update Job			| Authenticated                                | The Company that post the job   |
 	|-------------------------------+----------------------------------------------+---------------------------------|
 	| Delete Job                    | Authenticated                                | The Company that post the job   |
 	|                               |                                              | or Admin                        |
