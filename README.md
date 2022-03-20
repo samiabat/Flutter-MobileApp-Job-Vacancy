@@ -19,11 +19,12 @@
 
 ## About The App
 <pre>
+ we are choosing to build a mobile app for job vaccancy. In short, what our app will do is to easily meet the the employee and the employer.
 Our project is a job vacancy Mobile App with flutter that allow
-	1, The organization to post the job
-	2, The jobseeker to visit the job vacancy
-	3, The admin will verify the organization
-	4, The admin will controll the  action of organizationies and the jobseekers
+	1, The organizations to post the job so that they will get the best employee.
+	2, The jobseekers to visit the job posted so that they get information esily.
+	3, The admin will verify the organization.
+	4, The admin will controll the  action of organizationies and the jobseekers.
 </pre>
 
 ## User Types
