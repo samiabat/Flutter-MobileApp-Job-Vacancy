@@ -1,6 +1,6 @@
 ## Title Of The Project
 <pre>
-	Job vacancy
+	Job-vacancy
 </pre>
 
 ## Group Members
@@ -70,8 +70,8 @@ Our project is a job vacancy Mobile App with flutter that allow
 	|               | Delete Job                                   |
 	|---------------+----------------------------------------------|
 	| Jobseeker     | View posted jobs                             |
-	|               | Unfollow the organization                    |
-	| 		| Follow the organization                      |
+	|               | Follow the organization                      |
+	| 		| Unfollow the organization                    |
 	|---------------+----------------------------------------------|
 	
 </pre>
