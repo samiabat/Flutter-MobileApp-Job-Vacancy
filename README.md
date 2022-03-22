@@ -12,6 +12,7 @@
 	|  1. Samuel Abatneh       |   UGR/7229/12     |         1   |
 	|  2. Sefineh Tesfa        |  UGR/2844/12      |         1   |
 	|  3. Yeabsira Tekuamwork  |   UGR/9192/12     |         2   |
+	|  4. Hayat Ebrahim        |   UGR/1897/12     |         1   |
 	|------------------------------------------------------------|
 
 </pre>
