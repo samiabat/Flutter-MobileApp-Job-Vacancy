@@ -110,9 +110,10 @@ The app also has autherization too, so that specific user will have a specific p
 	|-------------------------------+----------------------------------------------+---------------------------------|
 
 ## Some tips to run the back-end part
-	<pre>
-		1, clone the project
-		2, open the backend folder
-		3, pip install -r requirements.txt
-		4, python3 manage.py runserver
-	</pre>
+<pre>
+	1, clone the project
+	2, open the backend folder
+	3, pip install -r requirements.txt
+	4, python3 manage.py runserver
+</pre>
+	
