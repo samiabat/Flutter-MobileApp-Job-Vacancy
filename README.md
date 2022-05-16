@@ -109,11 +109,10 @@ The app also has autherization too, so that specific user will have a specific p
 	| Unfollow the organization     | Authenticated                                | Jobseeker only                  |
 	|-------------------------------+----------------------------------------------+---------------------------------|
 
-
-## some tips to run the back end part
-     <pre>
-	1, clone the project
-	2, open the backend folder
-	3, pip install -r requirements.txt
-	4, python3 manage.py runserver
-     </pre>
+## Some tips to run the back-end part
+	<pre>
+		1, clone the project
+		2, open the backend folder
+		3, pip install -r requirements.txt
+		4, python3 manage.py runserver
+	</pre>
