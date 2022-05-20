@@ -9,7 +9,6 @@ class Job(models.Model):
     date_updated = models.DateTimeField(auto_now=True)
 
 
-
 class Company(models.Model):
     name = models.CharField(max_length=30, null=True)
     description = models.TextField(null=True, blank=True)
@@ -21,6 +20,8 @@ class Company(models.Model):
 class Report(models.Model):
 	company = models.ForeignKey(Company, on_delete=models.CASCADE)
 	job = models.ForeignKey(Job, on_delete=models.DO_NOTHING)
+
+
 class Post(models.Model):
     title = models.CharField(max_length=30, null=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
