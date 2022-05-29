@@ -1,1 +1,1 @@
-export 'job_model.dart';
+export 'job.dart';
