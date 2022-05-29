@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 @immutable
 class Job extends Equatable {
   Job({
-    required this.id,
+    this.id = '',
     required this.title,
     required this.poster,
     required this.description,
