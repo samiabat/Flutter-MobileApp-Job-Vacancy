@@ -1,17 +1,16 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
-import 'package:job_vacancy/jobs/job_models/job.dart';
+import '../job_models/job_model.dart';
 
 class JobDataProvider {
   final _baseUrl = 'http://127.0.0.1:8000';
   final http.Client httpClient;
 
-  JobDataProvider({required this.httpClient}) : assert(httpClient != null);
+  JobDataProvider({required this.httpClient});
 
   Future<Job> createJob(Job job) async {
     final responce = await httpClient.post(
-      Uri.http(_baseUrl, '/jobs'),
+      Uri.http(_baseUrl, '/jobs/'),
       headers: <String, String>{
         'Content-Type': 'application/json;charset:utf-8',
       },
@@ -32,7 +31,7 @@ class JobDataProvider {
   }
 
   Future<List<Job>> getJobs() async {
-    final responce = await httpClient.get(Uri.http(_baseUrl, '/jobs'));
+    final responce = await httpClient.get(Uri.http(_baseUrl, '/jobs/'));
     if (responce.statusCode == 200) {
       final jobs = jsonDecode(responce.body) as List;
       return jobs.map((job) => Job.fromJson(job)).toList();
@@ -55,7 +54,7 @@ class JobDataProvider {
 
   Future<void> updateJob(Job job) async {
     final http.Response responce =
-        await httpClient.put(Uri.http(_baseUrl, '/jobs/${job.id}'),
+        await httpClient.put(Uri.http(_baseUrl, '/jobs/${job.id}/'),
             headers: <String, String>{
               'Content-Type': 'application/json;charset:utf-8',
             },
