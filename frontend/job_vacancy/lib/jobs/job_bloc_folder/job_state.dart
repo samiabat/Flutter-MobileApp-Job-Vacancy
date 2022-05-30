@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../job_models/job.dart';
+import '../job_models/job_model.dart';
 
 class JobState extends Equatable {
   const JobState();

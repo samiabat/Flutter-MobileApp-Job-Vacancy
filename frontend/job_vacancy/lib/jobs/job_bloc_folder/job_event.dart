@@ -37,13 +37,13 @@ class JobUpdate extends JobEvent {
 }
 
 class JobDelete extends JobEvent {
-  final Job job;
+  final String id;
 
-  const JobDelete(this.job);
-
-  @override
-  List<Object> get props => [job];
+  const JobDelete(this.id);
 
   @override
-  toString() => 'Job Deleted {course: $job}';
+  List<Object> get props => [id];
+
+  @override
+  toString() => 'Job Deleted {course: $id}';
 }

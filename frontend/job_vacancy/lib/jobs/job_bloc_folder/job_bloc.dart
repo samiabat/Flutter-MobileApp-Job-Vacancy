@@ -1,14 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:job_vacancy/jobs/job_bloc_folder/job_event.dart';
-import 'package:job_vacancy/jobs/job_bloc_folder/job_state.dart';
-import 'package:job_vacancy/jobs/job_repository/job_repository.dart';
+import 'package:job_vacancy/jobs/job_bloc_folder/job_bloc_export.dart';
+import 'package:job_vacancy/jobs/job_repository/job_repository_export.dart';
 
 class JobBloc extends Bloc<JobEvent, JobState> {
   final JobRepository jobRepository;
   JobBloc({required this.jobRepository}) : super(JobLoading());
-
-  @override
-  Stream<JobState> mapEventState(JobEvent event) async* {
+  Stream<JobState> mapEventToState(JobEvent event) async* {
     if (event is JobLoad) {
       yield JobLoading();
       try {

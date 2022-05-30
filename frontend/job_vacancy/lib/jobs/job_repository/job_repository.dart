@@ -1,6 +1,7 @@
-import 'package:job_vacancy/jobs/job_data_provider/job_data.dart';
+import 'package:job_vacancy/jobs/job_data_provider/job_data_provider.dart';
 
-import '../job_models/job.dart';
+import '../job_models/job_model.dart';
+
 
 class JobRepository {
   final JobDataProvider dataProvider;
