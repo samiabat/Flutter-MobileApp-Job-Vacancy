@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 @immutable
 class Job extends Equatable {
   Job({
-    this.id = '',
+    required this.id,
     required this.title,
     required this.poster,
     required this.description,
@@ -12,9 +12,9 @@ class Job extends Equatable {
     required this.date_updated,
   });
 
-  final String id;
+  final int id;
   final String title;
-  final String poster;
+  final int poster;
   final String description;
   final String date_created;
   final String date_updated;
@@ -35,5 +35,5 @@ class Job extends Equatable {
 
   @override
   String toString() =>
-      'Course { id: $id, poster: $poster, description: $description }';
+      'Job { id: $id, poster: $poster, description: $description }';
 }

@@ -4,44 +4,56 @@ import 'package:job_vacancy/jobs/job_repository/job_repository_export.dart';
 
 class JobBloc extends Bloc<JobEvent, JobState> {
   final JobRepository jobRepository;
-  JobBloc({required this.jobRepository}) : super(JobLoading());
-  Stream<JobState> mapEventToState(JobEvent event) async* {
-    if (event is JobLoad) {
-      yield JobLoading();
+  JobBloc({required this.jobRepository}) : super(JobLoading()) {
+    on<JobLoad>((event, emit) async {
+      emit(JobLoading());
       try {
         final jobs = await jobRepository.getJobs();
-        yield JobLoadSuccess();
-      } catch (_) {
-        yield JobOperationFailure();
-      }
-    }
-    if (event is JobCreate) {
-      try {
-        await jobRepository.createJob(event.job);
-        final responce = await jobRepository.getJobs();
-        yield JobLoadSuccess(responce);
-      } catch (_) {
-        yield JobOperationFailure();
-      }
-    }
-    if (event is JobUpdate) {
-      try {
-        await jobRepository.updateJob(event.job);
-        final responce = await jobRepository.getJobs();
-        yield JobLoadSuccess(responce);
-      } catch (_) {
-        yield JobOperationFailure();
-      }
-    }
+        emit(JobLoadSuccess(jobs));
 
-    if (event is JobDelete) {
-      try {
-        await jobRepository.deleteJob(event.id);
-        final responce = await jobRepository.getJobs();
-        yield JobLoadSuccess(responce);
       } catch (_) {
-        JobOperationFailure();
+        emit(JobOperationFailure());
       }
-    }
+    });
   }
 }
+//   Stream<JobState> mapEventToState(JobEvent event) async* {
+//     if (event is JobLoad) {
+//       yield JobLoading();
+//       try {
+//         final jobs = await jobRepository.getJobs();
+//         yield JobLoadSuccess();
+//       } catch (_) {
+//         yield JobOperationFailure();
+//       }
+//     }
+//     if (event is JobCreate) {
+//       try {
+//         await jobRepository.createJob(event.job);
+//         final responce = await jobRepository.getJobs();
+//         yield JobLoadSuccess(responce);
+//       } catch (_) {
+//         yield JobOperationFailure();
+//       }
+//     }
+//     if (event is JobUpdate) {
+//       try {
+//         await jobRepository.updateJob(event.job);
+//         final responce = await jobRepository.getJobs();
+//         yield JobLoadSuccess(responce);
+//       } catch (_) {
+//         yield JobOperationFailure();
+//       }
+//     }
+
+//     if (event is JobDelete) {
+//       try {
+//         await jobRepository.deleteJob(event.id);
+//         final responce = await jobRepository.getJobs();
+//         yield JobLoadSuccess(responce);
+//       } catch (_) {
+//         JobOperationFailure();
+//       }
+//     }
+//   }
+// }

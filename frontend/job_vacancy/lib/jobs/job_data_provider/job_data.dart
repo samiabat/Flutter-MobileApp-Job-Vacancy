@@ -31,7 +31,7 @@ class JobDataProvider {
   }
 
   Future<List<Job>> getJobs() async {
-    final responce = await httpClient.get(Uri.http(_baseUrl, '/jobs/'));
+    final responce = await httpClient.get(Uri.parse(_baseUrl + '/jobs/'));
     if (responce.statusCode == 200) {
       final jobs = jsonDecode(responce.body) as List;
       return jobs.map((job) => Job.fromJson(job)).toList();
