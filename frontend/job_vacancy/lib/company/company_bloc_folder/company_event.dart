@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
-
-import '../company.dart';
+import 'package:job_vacancy/company/company_models/company_model.dart';
 
 abstract class CompanyEvent extends Equatable {
   const CompanyEvent();

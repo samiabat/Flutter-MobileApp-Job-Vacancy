@@ -14,7 +14,7 @@ class JobLoading extends JobState {}
 class JobLoadSuccess extends JobState {
   final List<Job> jobs;
 
-  JobLoadSuccess([this.jobs = const []]);
+  const JobLoadSuccess([this.jobs = const []]);
 
   @override
   List<Object> get props => [jobs];

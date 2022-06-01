@@ -1,6 +1,6 @@
-import 'package:job_vacancy/company/company.dart';
 
-import '../company_data_provider/company_deta.dart';
+import 'package:job_vacancy/company/company_data_provider/company_data_provider_export.dart';
+import 'package:job_vacancy/company/company_models/company.dart';
 
 class CompanyRepository {
   final CompanyDataProvider dataProvider;

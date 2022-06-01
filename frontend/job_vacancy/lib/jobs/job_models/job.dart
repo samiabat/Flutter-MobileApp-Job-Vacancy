@@ -8,16 +8,16 @@ class Job extends Equatable {
     required this.title,
     required this.poster,
     required this.description,
-    required this.date_created,
-    required this.date_updated,
+    this.date_created = "",
+    this.date_updated = "",
   });
 
   final int id;
   final String title;
   final int poster;
   final String description;
-  final String date_created;
-  final String date_updated;
+  String date_created;
+  String date_updated;
 
   @override
   List<Object> get props =>

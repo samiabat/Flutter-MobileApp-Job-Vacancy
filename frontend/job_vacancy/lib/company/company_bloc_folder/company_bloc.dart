@@ -16,6 +16,17 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
         emit(CompanyOperationFailure());
       }
     });
+    // on<CompanyCreate>((event, emit) async{
+    //   try {
+    //     await jobRepository.createJob(event.job);
+    //     final responce = await jobRepository.getJobs();
+    //     yield JobLoadSuccess(responce);
+    //   } catch (_) {
+    //     yield JobOperationFailure();
+    //   }
+    // });
+
+    // on<Job>
   }
 }
 //   Stream<JobState> mapEventToState(JobEvent event) async* {

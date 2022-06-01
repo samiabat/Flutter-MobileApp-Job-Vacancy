@@ -10,7 +10,7 @@ class JobDataProvider {
 
   Future<Job> createJob(Job job) async {
     final responce = await httpClient.post(
-      Uri.http(_baseUrl, '/jobs/'),
+      (Uri.parse(_baseUrl + '/jobs/')),
       headers: <String, String>{
         'Content-Type': 'application/json;charset:utf-8',
       },
@@ -42,7 +42,7 @@ class JobDataProvider {
 
   Future<void> deleteJob(String id) async {
     final http.Response responce = await httpClient.delete(
-      Uri.http(_baseUrl, '/jobs/$id'),
+      Uri.parse(_baseUrl + '/jobs/$id/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -54,7 +54,7 @@ class JobDataProvider {
 
   Future<void> updateJob(Job job) async {
     final http.Response responce =
-        await httpClient.put(Uri.http(_baseUrl, '/jobs/${job.id}/'),
+        await httpClient.put(Uri.parse(_baseUrl + '/jobs/${job.id}/'),
             headers: <String, String>{
               'Content-Type': 'application/json;charset:utf-8',
             },

@@ -10,13 +10,33 @@ class JobBloc extends Bloc<JobEvent, JobState> {
       try {
         final jobs = await jobRepository.getJobs();
         emit(JobLoadSuccess(jobs));
-
       } catch (_) {
         emit(JobOperationFailure());
       }
     });
+    on<JobCreate>((event, emit) async {
+      try {
+        await jobRepository.createJob(event.job);
+        final responce = await jobRepository.getJobs();
+        emit(JobLoadSuccess(responce));
+      } catch (_) {
+        emit(JobOperationFailure());
+      }
+    });
+
+    on<JobDelete>((event, emit) async {
+      try {
+        await jobRepository.deleteJob(event.id);
+        final responce = await jobRepository.getJobs();
+        emit(JobLoadSuccess(responce));
+      } catch (_) {
+        JobOperationFailure();
+      }
+    });
   }
 }
+
+
 //   Stream<JobState> mapEventToState(JobEvent event) async* {
 //     if (event is JobLoad) {
 //       yield JobLoading();

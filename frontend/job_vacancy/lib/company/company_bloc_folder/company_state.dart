@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
-
-import '../company.dart';
+import 'package:job_vacancy/company/company_models/company_model.dart';
 
 class CompanyState extends Equatable {
   const CompanyState();
@@ -14,7 +13,7 @@ class CompanyLoading extends CompanyState {}
 class CompanyLoadSuccess extends CompanyState {
   final List<Company> companies;
 
-  CompanyLoadSuccess([this.companies = const []]);
+  const CompanyLoadSuccess([this.companies = const []]);
 
   @override
   List<Object> get props => [companies];

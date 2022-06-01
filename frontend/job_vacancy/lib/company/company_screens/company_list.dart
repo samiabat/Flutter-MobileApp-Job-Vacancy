@@ -1,27 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:job_vacancy/jobs/job_bloc_folder/job_bloc_export.dart';
-import 'package:job_vacancy/jobs/job_models/job.dart';
 
-class JobsList extends StatefulWidget {
+import '../company_bloc_folder/company_bloc_export.dart';
+
+class CompanysList extends StatefulWidget {
+  const CompanysList({Key? key}) : super(key: key);
+
   @override
-  State<JobsList> createState() => _JobsListState();
+  State<CompanysList> createState() => _CompanysListState();
 }
 
-class _JobsListState extends State<JobsList> {
+class _CompanysListState extends State<CompanysList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Container(
-          child: BlocBuilder<JobBloc, JobState>(
+          child: BlocBuilder<CompanyBloc, CompanyState>(
             builder: (context, state) {
-              if (state is JobLoadSuccess) {
-                final jobs = state.jobs;
-                return buildPageWithData(jobs);
+              if (state is CompanyLoadSuccess) {
+                final companies = state.companies;
+                return buildPageWithData(companies);
               }
-              if (state is JobOperationFailure) {
+              if (state is CompanyOperationFailure) {
                 return buildFailure();
               }
               return const CircularProgressIndicator();
@@ -32,22 +34,23 @@ class _JobsListState extends State<JobsList> {
     );
   }
 
-  Widget buildPageWithData(List<Job> jobs) {
+  Widget buildPageWithData(List<dynamic> companies) {
     return ListView.builder(
         scrollDirection: Axis.vertical,
-        itemCount: jobs.length,
+        itemCount: companies.length,
         itemBuilder: (context, index) {
           return GestureDetector(
-            onTap: () => context
-                .goNamed('details', params: {"id": jobs[index].id.toString()}),
+            onTap: () => context.goNamed('companyDetails',
+                params: {"id": companies[index].id.toString()}),
             child: ListTile(
-              title: Text(jobs[index].title),
-              subtitle: Text(jobs[index].description),
+              title: Text(companies[index].name),
+              subtitle: Text(companies[index].description),
               trailing: ElevatedButton(
                 style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Colors.red)),
                 onPressed: () {},
-                child: const Text("Delete", style: TextStyle(color: Colors.white)),
+                child:
+                    const Text("Delete", style: TextStyle(color: Colors.white)),
               ),
             ),
           );

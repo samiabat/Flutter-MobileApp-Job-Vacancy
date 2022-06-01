@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../company.dart';
+import 'package:job_vacancy/company/company_models/company.dart';
 
 class CompanyDataProvider {
   final _baseUrl = 'http://127.0.0.1:8000';
@@ -16,10 +16,10 @@ class CompanyDataProvider {
       },
       body: jsonEncode(<String, dynamic>{
         'id': company.id,
-        'poster': company.poster,
+        'name': company.name,
         'description': company.description,
-        'date_created': company.date_created,
-        'date_updated': company.date_updated,
+        'follower': company.follower,
+        'job': company.job,
       }),
     );
 
@@ -33,6 +33,9 @@ class CompanyDataProvider {
   Future<List<Company>> getCompanies() async {
     final responce = await httpClient.get(Uri.parse(_baseUrl + '/companies/'));
     if (responce.statusCode == 200) {
+      //final jobs = jsonDecode(responce.body) as List;
+      // return jobs.map((job) => Job.fromJson(job)).toList();
+      //
       final companies = jsonDecode(responce.body) as List;
       return companies.map((company) => Company.fromJson(company)).toList();
     } else {
@@ -60,10 +63,10 @@ class CompanyDataProvider {
             },
             body: jsonEncode(<String, dynamic>{
               'id': company.id,
-              'poster': company.poster,
+              'name': company.name,
               'description': company.description,
-              'date_created': company.date_created,
-              'date_updated': company.date_updated,
+              'follower': company.follower,
+              'job': company.job,
             }));
 
     if (responce.statusCode != 204) {
