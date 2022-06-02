@@ -15,6 +15,9 @@ class _CompanysListState extends State<CompanysList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Center(child: Text("List of companies")),
+      ),
       body: Center(
         child: Container(
           child: BlocBuilder<CompanyBloc, CompanyState>(

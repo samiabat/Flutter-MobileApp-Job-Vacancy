@@ -13,6 +13,14 @@ class _JobsListState extends State<JobsList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Center(child: Text("List of jobs")),
+        actions: [
+          IconButton(
+              onPressed: () => GoRouter.of(context).goNamed("add_update"),
+              icon: const Icon(Icons.add_box))
+        ],
+      ),
       body: Center(
         child: Container(
           child: BlocBuilder<JobBloc, JobState>(
@@ -43,12 +51,6 @@ class _JobsListState extends State<JobsList> {
             child: ListTile(
               title: Text(jobs[index].title),
               subtitle: Text(jobs[index].description),
-              trailing: ElevatedButton(
-                style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.red)),
-                onPressed: () {},
-                child: const Text("Delete", style: TextStyle(color: Colors.white)),
-              ),
             ),
           );
         });

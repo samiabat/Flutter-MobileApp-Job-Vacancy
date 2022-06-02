@@ -9,6 +9,9 @@ class JobDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Center(child: Text("Job Detail")),
+      ),
       body: FutureBuilder<Job>(
           future: getJob(),
           builder: (context, snapshot) {

@@ -8,6 +8,9 @@ class CompanyDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Center(child: Text("Company Detail")),
+      ),
       body: FutureBuilder<Company>(
           future: getCompany(),
           builder: (context, snapshot) {
