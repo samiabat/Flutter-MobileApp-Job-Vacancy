@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:job_vacancy/company/company_models/company_model.dart';
 
-import '../job_models/job.dart';
-
-class JobDetail extends StatelessWidget {
-  final Future<Job> job;
-  const JobDetail({Key? key, required this.job}) : super(key: key);
+class CompanyDetail extends StatelessWidget {
+  final Future<Company> company;
+  const CompanyDetail({Key? key, required this.company}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text("Job Detail")),
+        title: const Center(child: Text("Company Detail")),
       ),
-      body: FutureBuilder<Job>(
-          future: getJob(),
+      body: FutureBuilder<Company>(
+          future: getCompany(),
           builder: (context, snapshot) {
-            var job = snapshot.data;
+            var company = snapshot.data;
             return Center(
               child: Column(
                 children: [
@@ -23,16 +22,16 @@ class JobDetail extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: job != null
+                    child: company != null
                         ? Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: ListTile(
-                              title: Text(job.title),
+                              title: Text(company.name),
                               subtitle: Column(
                                 children: [
-                                  Text(job.description),
-                                  Text("job posted ${job.date_created}"),
-                                  Text("job updated on ${job.date_updated}"),
+                                  Text(company.description),
+                                  Text("Company posted ${company.follower}"),
+                                  Text("Company updated on ${company.job}"),
                                   TextButton(
                                     onPressed: () {},
                                     child: const Text("apply"),
@@ -41,7 +40,7 @@ class JobDetail extends StatelessWidget {
                               ),
                             ),
                           )
-                        : const Text("woops no job!"),
+                        : const Text("woops no Company!"),
                   )
                 ],
               ),
@@ -50,7 +49,7 @@ class JobDetail extends StatelessWidget {
     );
   }
 
-  Future<Job> getJob() async {
-    return await job;
+  Future<Company> getCompany() async {
+    return await company;
   }
 }
