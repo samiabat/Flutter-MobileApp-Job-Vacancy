@@ -4,7 +4,8 @@ import 'package:job_vacancy/jobs/job_repository/job_repository_export.dart';
 
 class JobBloc extends Bloc<JobEvent, JobState> {
   final JobRepository jobRepository;
-  JobBloc({required this.jobRepository}) : super(JobLoading()) {
+  JobBloc({required this.jobReposito  ry}) : super(JobLoading()) {
+    
     on<JobLoad>((event, emit) async {
       emit(JobLoading());
       try {

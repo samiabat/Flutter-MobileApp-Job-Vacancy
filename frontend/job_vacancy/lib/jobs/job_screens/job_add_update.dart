@@ -8,7 +8,11 @@ import '../job_models/job.dart';
 class AddUpdateJob extends StatefulWidget {
   const AddUpdateJob({Key? key}) : super(key: key);
 
-  @override
+  @override  tearDown((){
+     jobBloc.close();
+   }) 
+  }
+}
   _AddUpdateCourseState createState() => _AddUpdateCourseState();
 }
 
