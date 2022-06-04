@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:job_vacancy/login_info.dart';
 
 class Admin extends StatelessWidget {
   const Admin({Key? key}) : super(key: key);
@@ -111,8 +112,10 @@ class AdminPage extends StatelessWidget {
                       "Logout",
                       style: TextStyle(color: Colors.black),
                     ),
-                    leading: const Icon(Icons.settings),
-                    onTap: () => context.goNamed('logout'),
+                    leading: const Icon(Icons.logout),
+                    onTap: () async {
+                      LoginInfo().logout();
+                    },
                   ),
                 ],
               ),

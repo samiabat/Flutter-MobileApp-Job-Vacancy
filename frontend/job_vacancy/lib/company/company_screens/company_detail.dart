@@ -35,16 +35,15 @@ class CompanyDetail extends StatelessWidget {
                                   Text(company.description),
                                   Row(
                                     children: [
-                                      TextButton(
+                                      IconButton(
                                         onPressed: () {
                                           BlocProvider.of<CompanyBloc>(context)
                                               .add(CompanyDelete(
                                                   company.id.toString()));
-                                          BlocProvider.of<CompanyBloc>(context)
-                                              .add(CompanyLoad());
-                                          Future.delayed(Duration(seconds: 2)).then((value) => context.goNamed("companies"));
+                                          context.goNamed("companies",
+                                              extra: {"refresh": true});
                                         },
-                                        child: const Text("delete"),
+                                        icon: const Icon(Icons.delete),
                                       ),
                                       TextButton(
                                         onPressed: () {},

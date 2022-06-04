@@ -16,7 +16,7 @@ void main() {
       "Emit [JobLoadSuccess]",
       build: () => JobBloc(jobRepository: jobRepository),
       act: (bloc) => bloc.add(const JobLoad()),
-      expect: () => JobLoading(),
+      expect: () => <JobState>[JobLoading()],
     );
   });
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:job_vacancy/user/user_screens/home_page.dart';
+import 'package:job_vacancy/authentication/screens/login_screens.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 
@@ -15,10 +15,7 @@ class Splash extends StatelessWidget {
         splash: Image.asset(
           'assets/c.png',
         ),
-        nextScreen: HomePage(
-          title: "Sami Login",
-          refresh: true,
-        ),
+        nextScreen: const LoginPage(),
         splashTransition: SplashTransition.fadeTransition,
         pageTransitionType: PageTransitionType.fade,
         backgroundColor: const Color.fromARGB(255, 255, 255, 255),

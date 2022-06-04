@@ -16,7 +16,7 @@ void main() {
       "Emit [CompanyLoading]",
       build: () => CompanyBloc(companyRepository: companyRepository),
       act: (bloc) => bloc.add(const CompanyLoad()),
-      expect: () => CompanyLoading(),
+      expect: () => <CompanyState>[CompanyLoading()],
     );
   });
 }

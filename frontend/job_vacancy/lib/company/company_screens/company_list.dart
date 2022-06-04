@@ -5,13 +5,16 @@ import 'package:go_router/go_router.dart';
 import '../company_bloc_folder/company_bloc_export.dart';
 
 class CompanysList extends StatefulWidget {
-  const CompanysList({Key? key}) : super(key: key);
+  CompanysList({Key? key}) : super(key: key);
 
   @override
   State<CompanysList> createState() => _CompanysListState();
 }
 
 class _CompanysListState extends State<CompanysList> {
+  _CompanysListState({this.refresh = false});
+  var refresh;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,6 +35,10 @@ class _CompanysListState extends State<CompanysList> {
         child: Container(
           child: BlocBuilder<CompanyBloc, CompanyState>(
             builder: (context, state) {
+              if (!refresh) {
+                BlocProvider.of<CompanyBloc>(context).add(CompanyLoad());
+                refresh = true;
+              }
               if (state is CompanyLoadSuccess) {
                 final companies = state.companies;
                 return buildPageWithData(companies);

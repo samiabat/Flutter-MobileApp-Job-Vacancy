@@ -93,7 +93,7 @@ class _LoginPageState extends State<LoginPage> {
             padding: const EdgeInsets.only(bottom: 10),
             child: FormHelper.inputFieldWidget(
               context,
-              "Username",
+              "username",
               "Username",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
@@ -119,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
             padding: const EdgeInsets.only(bottom: 10),
             child: FormHelper.inputFieldWidget(
               context,
-              "Password",
+              "password",
               "Password",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
@@ -258,7 +258,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          context.goNamed("home");
+                          context.goNamed("register");
                         },
                     ),
                   ],

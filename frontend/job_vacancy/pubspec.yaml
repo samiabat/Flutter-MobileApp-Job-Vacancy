@@ -51,6 +51,7 @@ dev_dependencies:
   test: 
   bloc_test:
   mockito:
+  integration_test:
 
 
 

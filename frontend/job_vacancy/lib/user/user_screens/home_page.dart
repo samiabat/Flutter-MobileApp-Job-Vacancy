@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:job_vacancy/jobs/job_bloc_folder/job_bloc_export.dart';
+import 'package:job_vacancy/user/user_screens/admin_page/admin_page.dart';
 import 'package:job_vacancy/user/user_screens/cards.dart';
 import 'package:job_vacancy/user/user_screens/jobs.dart';
 
@@ -44,77 +45,78 @@ class _HomePageState extends State<HomePage> {
     return FutureBuilder(
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
       return Scaffold(
-          appBar: AppBar(
-            title: const Text("Home"),
-            actions: [
-              IconButton(
-                onPressed: () => GoRouter.of(context).goNamed("companies"),
-                icon: const Icon(Icons.adobe_sharp),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              IconButton(
-                onPressed: () => GoRouter.of(context).goNamed("login"),
-                icon: const Icon(Icons.login),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              IconButton(
-                onPressed: () => GoRouter.of(context).goNamed("admin"),
-                icon: const Icon(Icons.perm_contact_cal_sharp),
-              ),
-            ],
-          ),
-          body: BlocBuilder<JobBloc, JobState>(
-            builder: (context, state) {
-              if (state is JobLoadSuccess) {
-                var jobs = state.jobs;
-                return Column(
-                  children: [
-                    SafeArea(
-                      child: Container(
-                        padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                        child: SafeArea(
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                                children: jobs
-                                    .map((job) => CustomCard(job: job))
-                                    .toList()),
-                          ),
+        appBar: AppBar(
+          actions: [
+            IconButton(
+              onPressed: () => GoRouter.of(context).goNamed("companies"),
+              icon: const Icon(Icons.adobe_sharp),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            IconButton(
+              onPressed: () => GoRouter.of(context).goNamed("login"),
+              icon: const Icon(Icons.login),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            IconButton(
+              onPressed: () => GoRouter.of(context).goNamed("admin"),
+              icon: const Icon(Icons.perm_contact_cal_sharp),
+            ),
+          ],
+        ),
+        body: BlocBuilder<JobBloc, JobState>(
+          builder: (context, state) {
+            if (state is JobLoadSuccess) {
+              var jobs = state.jobs;
+              return Column(
+                children: [
+                  SafeArea(
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                      child: SafeArea(
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                              children: jobs
+                                  .map((job) => CustomCard(job: job))
+                                  .toList()),
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 20,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: jobs.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () => context.goNamed(
+                            'details',
+                            params: {
+                              "id": jobs[index].id.toString(),
+                            },
+                          ),
+                          child: Widget1(
+                            job: jobs[index],
+                          ),
+                        );
+                      },
                     ),
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: jobs.length,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () => context.goNamed(
-                              'details',
-                              params: {
-                                "id": jobs[index].id.toString(),
-                              },
-                            ),
-                            child: Widget1(
-                              job: jobs[index],
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                );
-              } else {
-                return const Center(child: Text("woops no job!"));
-              }
-            },
-          ));
+                  ),
+                ],
+              );
+            } else {
+              return const Center(child: Text("woops no job!"));
+            }
+          },
+        ),
+        drawer: const AdminPage(),
+      );
     });
   }
 

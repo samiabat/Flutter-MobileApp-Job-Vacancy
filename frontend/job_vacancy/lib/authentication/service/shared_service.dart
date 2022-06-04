@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:job_vacancy/authentication/login/models/login_responce_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SharedService {
+class SharedService extends ChangeNotifier {
   static Future<bool> isLoggedIn() async {
     var prefs = await SharedPreferences.getInstance();
     var token = await prefs.getString("access");
@@ -27,9 +27,10 @@ class SharedService {
     prefs.setString("refresh", loginResponse.refresh);
   }
 
-  static Future<void> logout(BuildContext context) async {
+
+  static Future<void> logout() async {
     var prefs = await SharedPreferences.getInstance();
-    await prefs.remove("token");
+    await prefs.remove("access");
     await prefs.remove("refresh");
   }
 }

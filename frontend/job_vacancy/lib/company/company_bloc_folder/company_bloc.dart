@@ -6,7 +6,6 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
   final CompanyRepository companyRepository;
 
   CompanyBloc({required this.companyRepository}) : super(CompanyLoading()) {
-    print(state);
     on<CompanyLoad>((event, emit) async {
       emit(CompanyLoading());
       try {

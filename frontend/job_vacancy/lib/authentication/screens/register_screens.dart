@@ -261,37 +261,48 @@ class _RegisterPageState extends State<RegisterPage> {
                     repeatPassword: repeatPassword,
                   );
 
-                  APIService.register(model).then(
-                    (response) {
-                      setState(() {
-                        isApiCallProcess = false;
-                      });
-                      print(response.statusCode);
-                      if (response.statusCode == 201) {
-                        FormHelper.showSimpleAlertDialog(
-                          context,
-                          response.message,
-                          "Success",
-                          "OK",
-                          () {
-                            Navigator.of(context).pop();
-                          },
-                        );
-                        Future.delayed(Duration(seconds: 3))
-                            .then((value) => context.goNamed("login"));
-                      } else {
-                        FormHelper.showSimpleAlertDialog(
-                          context,
-                          response.message,
-                          "Failed!",
-                          "OK",
-                          () {
-                            Navigator.of(context).pop();
-                          },
-                        );
-                      }
-                    },
-                  );
+                  if (password != repeatPassword) {
+                    FormHelper.showSimpleAlertDialog(
+                      context,
+                      "password mismuch!",
+                      "Failed!",
+                      "OK",
+                      () {
+                        Navigator.of(context).pop();
+                      },
+                    );
+                  } else if (password == repeatPassword) {
+                    APIService.register(model).then(
+                      (response) {
+                        setState(() {
+                          isApiCallProcess = false;
+                        });
+                        if (response.statusCode == 201) {
+                          FormHelper.showSimpleAlertDialog(
+                            context,
+                            response.message,
+                            "Success",
+                            "OK",
+                            () {
+                              Navigator.of(context).pop();
+                            },
+                          );
+                          Future.delayed(Duration(seconds: 3))
+                              .then((value) => context.goNamed("login"));
+                        } else {
+                          FormHelper.showSimpleAlertDialog(
+                            context,
+                            response.message,
+                            "Failed!",
+                            "OK",
+                            () {
+                              Navigator.of(context).pop();
+                            },
+                          );
+                        }
+                      },
+                    );
+                  }
                 }
               },
               btnColor: HexColor("283B71"),
