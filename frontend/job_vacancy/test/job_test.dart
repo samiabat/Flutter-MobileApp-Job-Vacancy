@@ -22,15 +22,15 @@
 // expect => is a simple Iterable, which is used to ensure that act called from previous parameter will return State or States noted in here.
 
 
- class MockJobRepository extends Mock implements JobRepository{}
- void main(){
-   MockJobRepository mockJob;
-   setUp((){
-     mockJob=MockJobRepository();
+//  class MockJobRepository extends Mock implements JobRepository{}
+//  void main(){
+//    MockJobRepository mockJob;
+//    setUp((){
+//      mockJob=MockJobRepository();
 
-   });
-   group('get jobs ',(){});
- }
+//    });
+//    group('get jobs ',(){});
+//  }
 
 
 
