@@ -1,28 +1,25 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:job_vacancy/jobs/job_bloc_folder/job_bloc_export.dart';
-import 'package:job_vacancy/jobs/job_models/job.dart';
+import 'package:job_vacancy/authentication/login/models/login_request_model.dart';
+import 'package:job_vacancy/authentication/service/api_service.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/ProgressHUD.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-class AddJobPage extends StatefulWidget {
-  const AddJobPage({Key? key}) : super(key: key);
+class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
-  _AddJobPageState createState() => _AddJobPageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _AddJobPageState extends State<AddJobPage> {
+class _LoginPageState extends State<LoginPage> {
   bool isApiCallProcess = false;
   bool hidePassword = true;
   GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
-  late int id;
-  late String title;
-  late int poster;
-  late String description;
+  late String username;
+  late String password;
 
   @override
   void initState() {
@@ -40,14 +37,14 @@ class _AddJobPageState extends State<AddJobPage> {
           key: UniqueKey(),
           child: Form(
             key: globalFormKey,
-            child: _AddJobUI(context),
+            child: _loginUI(context),
           ),
         ),
       ),
     );
   }
 
-  Widget _AddJobUI(BuildContext context) {
+  Widget _loginUI(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -80,7 +77,7 @@ class _AddJobPageState extends State<AddJobPage> {
           Row(
             children: [
               const Text(
-                "AddJob",
+                "Login",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 25,
@@ -88,10 +85,7 @@ class _AddJobPageState extends State<AddJobPage> {
                 ),
               ),
               IconButton(
-                  onPressed: () {
-                    BlocProvider.of<JobBloc>(context).add(const JobLoad());
-                    context.goNamed("home");
-                  },
+                  onPressed: () => context.goNamed("home"),
                   icon: const Icon(Icons.login_sharp))
             ],
           ),
@@ -99,17 +93,17 @@ class _AddJobPageState extends State<AddJobPage> {
             padding: const EdgeInsets.only(bottom: 10),
             child: FormHelper.inputFieldWidget(
               context,
-              "id",
-              "id",
+              "Username",
+              "Username",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return 'title can\'t be empty.';
+                  return 'Username can\'t be empty.';
                 }
 
                 return null;
               },
               (onSavedVal) => {
-                id = int.parse(onSavedVal),
+                username = onSavedVal,
               },
               initialValue: "",
               obscureText: false,
@@ -125,77 +119,37 @@ class _AddJobPageState extends State<AddJobPage> {
             padding: const EdgeInsets.only(bottom: 10),
             child: FormHelper.inputFieldWidget(
               context,
-              "title",
-              "title",
+              "Password",
+              "Password",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return 'title can\'t be empty.';
+                  return 'Password can\'t be empty.';
                 }
 
                 return null;
               },
               (onSavedVal) => {
-                title = onSavedVal,
+                password = onSavedVal,
               },
               initialValue: "",
-              obscureText: false,
+              obscureText: hidePassword,
               borderFocusColor: Colors.white,
               prefixIconColor: Colors.white,
               borderColor: Colors.white,
               textColor: Colors.white,
               hintColor: Colors.white.withOpacity(0.7),
               borderRadius: 10,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 10),
-            child: FormHelper.inputFieldWidget(
-              context,
-              "poster",
-              "poster",
-              (onValidateVal) {
-                if (onValidateVal.isEmpty) {
-                  return 'Poster can\'t be empty.';
-                }
-
-                return null;
-              },
-              (onSavedVal) => {
-                poster = int.parse(onSavedVal),
-              },
-              initialValue: "",
-              borderFocusColor: Colors.white,
-              prefixIconColor: Colors.white,
-              borderColor: Colors.white,
-              textColor: Colors.white,
-              hintColor: Colors.white.withOpacity(0.7),
-              borderRadius: 10,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 10),
-            child: FormHelper.inputFieldWidget(
-              context,
-              "description",
-              "description",
-              (onValidateVal) {
-                if (onValidateVal.isEmpty) {
-                  return 'Please Enter your description can\'t be empty.';
-                }
-
-                return null;
-              },
-              (onSavedVal) => {
-                description = onSavedVal,
-              },
-              initialValue: "",
-              borderFocusColor: Colors.white,
-              prefixIconColor: Colors.white,
-              borderColor: Colors.white,
-              isMultiline: true,
-              textColor: Colors.white,
-              hintColor: Colors.white.withOpacity(0.7),
-              borderRadius: 10,
+              suffixIcon: IconButton(
+                onPressed: () {
+                  setState(() {
+                    hidePassword = !hidePassword;
+                  });
+                },
+                color: Colors.white.withOpacity(0.7),
+                icon: Icon(
+                  hidePassword ? Icons.visibility_off : Icons.visibility,
+                ),
+              ),
             ),
           ),
           Align(
@@ -226,26 +180,39 @@ class _AddJobPageState extends State<AddJobPage> {
           ),
           Center(
             child: FormHelper.submitButton(
-              "AddJob",
+              "Login",
               () {
                 if (validateAndSave()) {
                   setState(() {
                     isApiCallProcess = true;
                   });
 
-                  Job model = Job(
-                    id: 0,
-                    title: title,
-                    poster: poster,
-                    description: description,
+                  LoginRequestModel model = LoginRequestModel(
+                    username: username,
+                    password: password,
                   );
-                  BlocProvider.of<JobBloc>(context).add(JobCreate(model));
-                  setState(() {
-                    BlocProvider.of<JobBloc>(context).add(JobLoad());
-                    isApiCallProcess = false;
-                    Future.delayed(Duration(seconds: 1))
-                        .then((value) => context.goNamed("jobs"));
-                  });
+
+                  APIService.login(model).then(
+                    (response) {
+                      setState(() {
+                        isApiCallProcess = false;
+                      });
+
+                      if (response) {
+                        context.goNamed("home");
+                      } else {
+                        FormHelper.showSimpleAlertDialog(
+                          context,
+                          "Wrong password",
+                          "Invalid Username/Password !!",
+                          "OK",
+                          () {
+                            Navigator.of(context).pop();
+                          },
+                        );
+                      }
+                    },
+                  );
                 }
               },
               btnColor: HexColor("283B71"),
@@ -281,17 +248,17 @@ class _AddJobPageState extends State<AddJobPage> {
                   style: const TextStyle(color: Colors.white, fontSize: 14.0),
                   children: <TextSpan>[
                     const TextSpan(
-                      text: 'Do you have an account? ',
+                      text: 'Dont have an account? ',
                     ),
                     TextSpan(
-                      text: 'login',
+                      text: 'Sign up',
                       style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          context.goNamed("login");
+                          context.goNamed("home");
                         },
                     ),
                   ],

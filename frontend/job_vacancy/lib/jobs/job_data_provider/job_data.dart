@@ -9,29 +9,23 @@ class JobDataProvider {
   JobDataProvider({required this.httpClient});
 
   Future<Job> createJob(Job job) async {
-    final responce = await httpClient.post(
-      (Uri.parse(_baseUrl + '/jobs/')),
-      headers: <String, String>{
-        'Content-Type': 'application/json;charset:utf-8',
-      },
-      body: jsonEncode(<String, dynamic>{
-        'id': job.id,
-        'poster': job.poster,
-        'description': job.description,
-        'date_created': job.date_created,
-        'date_updated': job.date_updated,
-      }),
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+    };
+
+    var response = await httpClient.post(
+      Uri.parse("$_baseUrl/jobs/"),
+      headers: requestHeaders,
+      body: jsonEncode(job.toJson()),
     );
 
-    if (responce.statusCode == 200) {
-      return Job.fromJson(jsonDecode(responce.body));
-    } else {
-      throw Exception('Failed to create the job');
-    }
+    return jobJson(
+      response.body,
+    );
   }
 
   Future<List<Job>> getJobs() async {
-    final responce = await httpClient.get(Uri.parse(_baseUrl + '/jobs/'));
+    final responce = await httpClient.get(Uri.parse('$_baseUrl/jobs/'));
     if (responce.statusCode == 200) {
       final jobs = jsonDecode(responce.body) as List;
       return jobs.map((job) => Job.fromJson(job)).toList();

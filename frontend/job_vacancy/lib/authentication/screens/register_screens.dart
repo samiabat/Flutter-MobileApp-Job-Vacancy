@@ -1,28 +1,27 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:job_vacancy/jobs/job_bloc_folder/job_bloc_export.dart';
-import 'package:job_vacancy/jobs/job_models/job.dart';
+import 'package:job_vacancy/authentication/registration/models/register_request_model.dart';
+import 'package:job_vacancy/authentication/service/api_service.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/ProgressHUD.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-class AddJobPage extends StatefulWidget {
-  const AddJobPage({Key? key}) : super(key: key);
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({Key? key}) : super(key: key);
 
   @override
-  _AddJobPageState createState() => _AddJobPageState();
+  _RegisterPageState createState() => _RegisterPageState();
 }
 
-class _AddJobPageState extends State<AddJobPage> {
+class _RegisterPageState extends State<RegisterPage> {
   bool isApiCallProcess = false;
   bool hidePassword = true;
   GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
-  late int id;
-  late String title;
-  late int poster;
-  late String description;
+  late String username;
+  late String email;
+  late String password;
+  late String repeatPassword;
 
   @override
   void initState() {
@@ -40,14 +39,14 @@ class _AddJobPageState extends State<AddJobPage> {
           key: UniqueKey(),
           child: Form(
             key: globalFormKey,
-            child: _AddJobUI(context),
+            child: _RegisterUI(context),
           ),
         ),
       ),
     );
   }
 
-  Widget _AddJobUI(BuildContext context) {
+  Widget _RegisterUI(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -80,7 +79,7 @@ class _AddJobPageState extends State<AddJobPage> {
           Row(
             children: [
               const Text(
-                "AddJob",
+                "Register",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 25,
@@ -88,10 +87,7 @@ class _AddJobPageState extends State<AddJobPage> {
                 ),
               ),
               IconButton(
-                  onPressed: () {
-                    BlocProvider.of<JobBloc>(context).add(const JobLoad());
-                    context.goNamed("home");
-                  },
+                  onPressed: () => context.goNamed("home"),
                   icon: const Icon(Icons.login_sharp))
             ],
           ),
@@ -99,17 +95,17 @@ class _AddJobPageState extends State<AddJobPage> {
             padding: const EdgeInsets.only(bottom: 10),
             child: FormHelper.inputFieldWidget(
               context,
-              "id",
-              "id",
+              "Username",
+              "Username",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return 'title can\'t be empty.';
+                  return 'Username can\'t be empty.';
                 }
 
                 return null;
               },
               (onSavedVal) => {
-                id = int.parse(onSavedVal),
+                username = onSavedVal,
               },
               initialValue: "",
               obscureText: false,
@@ -125,17 +121,17 @@ class _AddJobPageState extends State<AddJobPage> {
             padding: const EdgeInsets.only(bottom: 10),
             child: FormHelper.inputFieldWidget(
               context,
-              "title",
-              "title",
+              "email",
+              "email",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return 'title can\'t be empty.';
+                  return 'Email can\'t be empty.';
                 }
 
                 return null;
               },
               (onSavedVal) => {
-                title = onSavedVal,
+                email = onSavedVal,
               },
               initialValue: "",
               obscureText: false,
@@ -151,51 +147,76 @@ class _AddJobPageState extends State<AddJobPage> {
             padding: const EdgeInsets.only(bottom: 10),
             child: FormHelper.inputFieldWidget(
               context,
-              "poster",
-              "poster",
+              "Password",
+              "Password",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return 'Poster can\'t be empty.';
+                  return 'Password can\'t be empty.';
                 }
 
                 return null;
               },
               (onSavedVal) => {
-                poster = int.parse(onSavedVal),
+                password = onSavedVal,
               },
               initialValue: "",
+              obscureText: hidePassword,
               borderFocusColor: Colors.white,
               prefixIconColor: Colors.white,
               borderColor: Colors.white,
               textColor: Colors.white,
               hintColor: Colors.white.withOpacity(0.7),
               borderRadius: 10,
+              suffixIcon: IconButton(
+                onPressed: () {
+                  setState(() {
+                    hidePassword = !hidePassword;
+                  });
+                },
+                color: Colors.white.withOpacity(0.7),
+                icon: Icon(
+                  hidePassword ? Icons.visibility_off : Icons.visibility,
+                ),
+              ),
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 10),
             child: FormHelper.inputFieldWidget(
               context,
-              "description",
-              "description",
+              "Repeat Password",
+              "Repeat password",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return 'Please Enter your description can\'t be empty.';
+                  return 'Please Enter your password can\'t be empty.';
                 }
-
-                return null;
+                if (true) {
+                  return null;
+                }
+                // return 'Password mismuch!';
               },
               (onSavedVal) => {
-                description = onSavedVal,
+                repeatPassword = onSavedVal,
               },
               initialValue: "",
+              obscureText: hidePassword,
               borderFocusColor: Colors.white,
               prefixIconColor: Colors.white,
               borderColor: Colors.white,
-              isMultiline: true,
               textColor: Colors.white,
               hintColor: Colors.white.withOpacity(0.7),
               borderRadius: 10,
+              suffixIcon: IconButton(
+                onPressed: () {
+                  setState(() {
+                    hidePassword = !hidePassword;
+                  });
+                },
+                color: Colors.white.withOpacity(0.7),
+                icon: Icon(
+                  hidePassword ? Icons.visibility_off : Icons.visibility,
+                ),
+              ),
             ),
           ),
           Align(
@@ -226,26 +247,51 @@ class _AddJobPageState extends State<AddJobPage> {
           ),
           Center(
             child: FormHelper.submitButton(
-              "AddJob",
+              "Register",
               () {
                 if (validateAndSave()) {
                   setState(() {
                     isApiCallProcess = true;
                   });
 
-                  Job model = Job(
-                    id: 0,
-                    title: title,
-                    poster: poster,
-                    description: description,
+                  RegisterRequestModel model = RegisterRequestModel(
+                    username: username,
+                    email: email,
+                    password: password,
+                    repeatPassword: repeatPassword,
                   );
-                  BlocProvider.of<JobBloc>(context).add(JobCreate(model));
-                  setState(() {
-                    BlocProvider.of<JobBloc>(context).add(JobLoad());
-                    isApiCallProcess = false;
-                    Future.delayed(Duration(seconds: 1))
-                        .then((value) => context.goNamed("jobs"));
-                  });
+
+                  APIService.register(model).then(
+                    (response) {
+                      setState(() {
+                        isApiCallProcess = false;
+                      });
+                      print(response.statusCode);
+                      if (response.statusCode == 201) {
+                        FormHelper.showSimpleAlertDialog(
+                          context,
+                          response.message,
+                          "Success",
+                          "OK",
+                          () {
+                            Navigator.of(context).pop();
+                          },
+                        );
+                        Future.delayed(Duration(seconds: 3))
+                            .then((value) => context.goNamed("login"));
+                      } else {
+                        FormHelper.showSimpleAlertDialog(
+                          context,
+                          response.message,
+                          "Failed!",
+                          "OK",
+                          () {
+                            Navigator.of(context).pop();
+                          },
+                        );
+                      }
+                    },
+                  );
                 }
               },
               btnColor: HexColor("283B71"),

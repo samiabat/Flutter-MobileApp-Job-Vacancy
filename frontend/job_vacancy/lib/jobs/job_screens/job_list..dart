@@ -17,8 +17,19 @@ class _JobsListState extends State<JobsList> {
         title: const Center(child: Text("List of jobs")),
         actions: [
           IconButton(
-              onPressed: () => GoRouter.of(context).goNamed("add_update"),
-              icon: const Icon(Icons.add_box))
+            onPressed: () => GoRouter.of(context).goNamed("add_update"),
+            icon: const Icon(
+              Icons.add_circle,
+              size: 35,
+            ),
+          ),
+          IconButton(
+            onPressed: () => GoRouter.of(context).goNamed("register"),
+            icon: const Icon(
+              Icons.add_circle,
+              size: 35,
+            ),
+          ),
         ],
       ),
       body: Center(
@@ -42,18 +53,47 @@ class _JobsListState extends State<JobsList> {
 
   Widget buildPageWithData(List<Job> jobs) {
     return ListView.builder(
-        scrollDirection: Axis.vertical,
-        itemCount: jobs.length,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () => context
-                .goNamed('details', params: {"id": jobs[index].id.toString()}),
-            child: ListTile(
-              title: Text(jobs[index].title),
-              subtitle: Text(jobs[index].description),
+      scrollDirection: Axis.vertical,
+      itemCount: jobs.length,
+      itemBuilder: (context, index) {
+        return box(jobs[index]);
+      },
+    );
+  }
+
+  Widget box(Job job) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Card(
+        child: ListTile(
+          title: GestureDetector(
+            onTap: () =>
+                context.goNamed('details', params: {"id": job.id.toString()}),
+            child: Text(job.title,
+                style: const TextStyle(fontWeight: FontWeight.bold)),
+          ),
+          leading: const Icon(
+            Icons.add,
+            color: Color.fromARGB(255, 243, 33, 33),
+          ),
+          subtitle:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+            const Text('contact'),
+            const Text('Full time'),
+            ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(
+                    const Color.fromARGB(255, 18, 111, 135)),
+              ),
+              onPressed: () {},
+              child: const Text(
+                'Apply', /*style: TextStyle(fontSize: 16.0)*/
+              ),
             ),
-          );
-        });
+          ]),
+        ),
+      ),
+    );
   }
 
   Widget buildFailure() {

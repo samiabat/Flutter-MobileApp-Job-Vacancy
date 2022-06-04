@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:job_vacancy/jobs/job_bloc_folder/job_bloc_export.dart';
 
 import '../job_models/job.dart';
 
@@ -28,6 +31,19 @@ class JobDetail extends StatelessWidget {
                             padding: const EdgeInsets.all(8.0),
                             child: ListTile(
                               title: Text(job.title),
+                              trailing: IconButton(
+                                  onPressed: () {
+                                    BlocProvider.of<JobBloc>(context)
+                                        .add(JobDelete(job.id.toString()));
+
+                                    BlocProvider.of<JobBloc>(context)
+                                        .add(JobLoad());
+
+                                    context.goNamed("home",
+                                        extra: {"refresh": true});
+                                  },
+                                  icon: const Icon(Icons.delete,
+                                      color: Colors.red)),
                               subtitle: Column(
                                 children: [
                                   Text(job.description),

@@ -2,26 +2,25 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:job_vacancy/jobs/job_bloc_folder/job_bloc_export.dart';
-import 'package:job_vacancy/jobs/job_models/job.dart';
+import 'package:job_vacancy/company/company_bloc_folder/company_bloc_export.dart';
+import 'package:job_vacancy/company/company_models/company_model.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/ProgressHUD.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 
-class AddJobPage extends StatefulWidget {
-  const AddJobPage({Key? key}) : super(key: key);
+class AddCompanyPage extends StatefulWidget {
+  const AddCompanyPage({Key? key}) : super(key: key);
 
   @override
-  _AddJobPageState createState() => _AddJobPageState();
+  _AddCompanyPageState createState() => _AddCompanyPageState();
 }
 
-class _AddJobPageState extends State<AddJobPage> {
+class _AddCompanyPageState extends State<AddCompanyPage> {
   bool isApiCallProcess = false;
   bool hidePassword = true;
   GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
   late int id;
-  late String title;
-  late int poster;
+  late String name;
   late String description;
 
   @override
@@ -40,14 +39,14 @@ class _AddJobPageState extends State<AddJobPage> {
           key: UniqueKey(),
           child: Form(
             key: globalFormKey,
-            child: _AddJobUI(context),
+            child: _AddCompanyUI(context),
           ),
         ),
       ),
     );
   }
 
-  Widget _AddJobUI(BuildContext context) {
+  Widget _AddCompanyUI(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -80,7 +79,7 @@ class _AddJobPageState extends State<AddJobPage> {
           Row(
             children: [
               const Text(
-                "AddJob",
+                "AddCompany",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 25,
@@ -89,7 +88,8 @@ class _AddJobPageState extends State<AddJobPage> {
               ),
               IconButton(
                   onPressed: () {
-                    BlocProvider.of<JobBloc>(context).add(const JobLoad());
+                    BlocProvider.of<CompanyBloc>(context)
+                        .add(const CompanyLoad());
                     context.goNamed("home");
                   },
                   icon: const Icon(Icons.login_sharp))
@@ -104,9 +104,15 @@ class _AddJobPageState extends State<AddJobPage> {
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
                   return 'title can\'t be empty.';
+                } else if (onValidateVal is int) {
+                  return null;
                 }
-
-                return null;
+                try {
+                  int.parse(onValidateVal);
+                  return null;
+                } catch (_) {
+                  return 'please enter valid data.';
+                }
               },
               (onSavedVal) => {
                 id = int.parse(onSavedVal),
@@ -125,43 +131,17 @@ class _AddJobPageState extends State<AddJobPage> {
             padding: const EdgeInsets.only(bottom: 10),
             child: FormHelper.inputFieldWidget(
               context,
-              "title",
-              "title",
+              "name",
+              "name",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return 'title can\'t be empty.';
+                  return 'Company name can\'t be empty.';
                 }
 
                 return null;
               },
               (onSavedVal) => {
-                title = onSavedVal,
-              },
-              initialValue: "",
-              obscureText: false,
-              borderFocusColor: Colors.white,
-              prefixIconColor: Colors.white,
-              borderColor: Colors.white,
-              textColor: Colors.white,
-              hintColor: Colors.white.withOpacity(0.7),
-              borderRadius: 10,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 10),
-            child: FormHelper.inputFieldWidget(
-              context,
-              "poster",
-              "poster",
-              (onValidateVal) {
-                if (onValidateVal.isEmpty) {
-                  return 'Poster can\'t be empty.';
-                }
-
-                return null;
-              },
-              (onSavedVal) => {
-                poster = int.parse(onSavedVal),
+                name = onSavedVal,
               },
               initialValue: "",
               borderFocusColor: Colors.white,
@@ -192,8 +172,8 @@ class _AddJobPageState extends State<AddJobPage> {
               borderFocusColor: Colors.white,
               prefixIconColor: Colors.white,
               borderColor: Colors.white,
-              isMultiline: true,
               textColor: Colors.white,
+              isMultiline: true,
               hintColor: Colors.white.withOpacity(0.7),
               borderRadius: 10,
             ),
@@ -226,25 +206,24 @@ class _AddJobPageState extends State<AddJobPage> {
           ),
           Center(
             child: FormHelper.submitButton(
-              "AddJob",
+              "AddCompany",
               () {
                 if (validateAndSave()) {
                   setState(() {
                     isApiCallProcess = true;
                   });
 
-                  Job model = Job(
+                  Company model = Company(
                     id: 0,
-                    title: title,
-                    poster: poster,
+                    name: name,
                     description: description,
                   );
-                  BlocProvider.of<JobBloc>(context).add(JobCreate(model));
+                  BlocProvider.of<CompanyBloc>(context)
+                      .add(CompanyCreate(model));
+                  BlocProvider.of<CompanyBloc>(context).add(CompanyLoad());
                   setState(() {
-                    BlocProvider.of<JobBloc>(context).add(JobLoad());
                     isApiCallProcess = false;
-                    Future.delayed(Duration(seconds: 1))
-                        .then((value) => context.goNamed("jobs"));
+                    context.goNamed('companies');
                   });
                 }
               },

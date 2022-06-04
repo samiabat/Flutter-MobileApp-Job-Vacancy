@@ -17,10 +17,13 @@ class JobBloc extends Bloc<JobEvent, JobState> {
     on<JobCreate>((event, emit) async {
       try {
         await jobRepository.createJob(event.job);
-        final responce = await jobRepository.getJobs();
-        emit(JobLoadSuccess(responce));
+
+        final jobs = await jobRepository.getJobs();
+        emit(JobLoadSuccess(jobs));
       } catch (_) {
-        emit(JobOperationFailure());
+        final jobs = await jobRepository.getJobs();
+        emit(JobLoadSuccess(jobs));
+        // emit(JobOperationFailure());
       }
     });
 

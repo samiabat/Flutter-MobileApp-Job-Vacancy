@@ -9,25 +9,19 @@ class CompanyDataProvider {
   CompanyDataProvider({required this.httpClient});
 
   Future<Company> createCompany(Company company) async {
-    final responce = await httpClient.post(
-      Uri.http(_baseUrl, '/companies/'),
-      headers: <String, String>{
-        'Content-Type': 'application/json;charset:utf-8',
-      },
-      body: jsonEncode(<String, dynamic>{
-        'id': company.id,
-        'name': company.name,
-        'description': company.description,
-        'follower': company.follower,
-        'job': company.job,
-      }),
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+    };
+
+    var response = await httpClient.post(
+      Uri.parse("$_baseUrl/companies/"),
+      headers: requestHeaders,
+      body: jsonEncode(company.toJson()),
     );
 
-    if (responce.statusCode == 200) {
-      return Company.fromJson(jsonDecode(responce.body));
-    } else {
-      throw Exception('Failed to create the Company');
-    }
+    return companyJson(
+      response.body,
+    );
   }
 
   Future<List<Company>> getCompanies() async {
@@ -45,7 +39,7 @@ class CompanyDataProvider {
 
   Future<void> deleteCompany(String id) async {
     final http.Response responce = await httpClient.delete(
-      Uri.http(_baseUrl, '/companiess/$id'),
+      Uri.parse('$_baseUrl/companies/$id/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -65,8 +59,6 @@ class CompanyDataProvider {
               'id': company.id,
               'name': company.name,
               'description': company.description,
-              'follower': company.follower,
-              'job': company.job,
             }));
 
     if (responce.statusCode != 204) {

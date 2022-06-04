@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+
+Job jobJson(String str) => Job.fromJson(json.decode(str));
 
 @immutable
 class Job extends Equatable {
@@ -33,7 +37,15 @@ class Job extends Equatable {
         date_updated: json['date_updated']);
   }
 
+  Map<String, dynamic> toJson() {
+    final _data = <String, dynamic>{};
+    _data['title'] = title;
+    _data['poster'] = poster;
+    _data['description'] = description;
+    return _data;
+  }
+
   @override
   String toString() =>
-      'Job { id: $id, poster: $poster, description: $description }';
+      'Job { id: $id ,title: $title, poster: $poster, description: $description }';
 }

@@ -17,6 +17,16 @@ class _CompanysListState extends State<CompanysList> {
     return Scaffold(
       appBar: AppBar(
         title: const Center(child: Text("List of companies")),
+        actions: [
+          IconButton(
+            onPressed: () => context.goNamed("addCompany"),
+            icon: const Icon(Icons.add),
+          ),
+          IconButton(
+            onPressed: () => context.goNamed("home"),
+            icon: const Icon(Icons.home),
+          ),
+        ],
       ),
       body: Center(
         child: Container(
@@ -27,6 +37,7 @@ class _CompanysListState extends State<CompanysList> {
                 return buildPageWithData(companies);
               }
               if (state is CompanyOperationFailure) {
+                BlocProvider.of<CompanyBloc>(context).add(CompanyLoad());
                 return buildFailure();
               }
               return const CircularProgressIndicator();
@@ -39,25 +50,26 @@ class _CompanysListState extends State<CompanysList> {
 
   Widget buildPageWithData(List<dynamic> companies) {
     return ListView.builder(
-        scrollDirection: Axis.vertical,
-        itemCount: companies.length,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () => context.goNamed('companyDetails',
-                params: {"id": companies[index].id.toString()}),
-            child: ListTile(
-              title: Text(companies[index].name),
-              subtitle: Text(companies[index].description),
-              trailing: ElevatedButton(
-                style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.red)),
-                onPressed: () {},
-                child:
-                    const Text("Delete", style: TextStyle(color: Colors.white)),
-              ),
+      scrollDirection: Axis.vertical,
+      itemCount: companies.length,
+      itemBuilder: (context, index) {
+        return GestureDetector(
+          onTap: () => context.goNamed('companyDetails',
+              params: {"id": companies[index].id.toString()}),
+          child: ListTile(
+            title: Text(companies[index].name),
+            subtitle: Text(companies[index].description),
+            trailing: ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.blue)),
+              onPressed: () {},
+              child:
+                  const Text("Follow", style: TextStyle(color: Colors.white)),
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 
   Widget buildFailure() {

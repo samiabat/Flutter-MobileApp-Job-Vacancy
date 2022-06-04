@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:job_vacancy/company/company_bloc_folder/company_bloc_export.dart';
 import 'package:job_vacancy/company/company_models/company_model.dart';
 
 class CompanyDetail extends StatelessWidget {
@@ -30,11 +33,24 @@ class CompanyDetail extends StatelessWidget {
                               subtitle: Column(
                                 children: [
                                   Text(company.description),
-                                  Text("Company posted ${company.follower}"),
-                                  Text("Company updated on ${company.job}"),
-                                  TextButton(
-                                    onPressed: () {},
-                                    child: const Text("apply"),
+                                  Row(
+                                    children: [
+                                      TextButton(
+                                        onPressed: () {
+                                          BlocProvider.of<CompanyBloc>(context)
+                                              .add(CompanyDelete(
+                                                  company.id.toString()));
+                                          BlocProvider.of<CompanyBloc>(context)
+                                              .add(CompanyLoad());
+                                          Future.delayed(Duration(seconds: 2)).then((value) => context.goNamed("companies"));
+                                        },
+                                        child: const Text("delete"),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {},
+                                        child: const Text("apply"),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
