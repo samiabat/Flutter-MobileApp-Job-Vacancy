@@ -17,17 +17,9 @@ class _JobsListState extends State<JobsList> {
         title: const Center(child: Text("List of jobs")),
         actions: [
           IconButton(
-            onPressed: () => GoRouter.of(context).goNamed("add_update"),
+            onPressed: () => GoRouter.of(context).goNamed("home"),
             icon: const Icon(
-              Icons.add_circle,
-              size: 35,
-            ),
-          ),
-          IconButton(
-            onPressed: () => GoRouter.of(context).goNamed("register"),
-            icon: const Icon(
-              Icons.add_circle,
-              size: 35,
+              Icons.home,
             ),
           ),
         ],

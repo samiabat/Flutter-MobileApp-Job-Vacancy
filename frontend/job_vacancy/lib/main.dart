@@ -144,7 +144,7 @@ Future<void> main() async {
         name: "addCompany",
         path: '/add_company',
         builder: (BuildContext context, GoRouterState state) =>
-            const AddCompanyPage(),
+            AddEditCompanyPage(),
       ),
       GoRoute(
         name: "add_update",

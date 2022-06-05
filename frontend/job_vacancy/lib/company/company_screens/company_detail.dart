@@ -18,46 +18,48 @@ class CompanyDetail extends StatelessWidget {
           future: getCompany(),
           builder: (context, snapshot) {
             var company = snapshot.data;
-            return Center(
-              child: Column(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: company != null
-                        ? Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ListTile(
-                              title: Text(company.name),
-                              subtitle: Column(
-                                children: [
-                                  Text(company.description),
-                                  Row(
-                                    children: [
-                                      IconButton(
-                                        onPressed: () {
-                                          BlocProvider.of<CompanyBloc>(context)
-                                              .add(CompanyDelete(
-                                                  company.id.toString()));
-                                          context.goNamed("companies",
-                                              extra: {"refresh": true});
-                                        },
-                                        icon: const Icon(Icons.delete),
-                                      ),
-                                      TextButton(
-                                        onPressed: () {},
-                                        child: const Text("apply"),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+            return SingleChildScrollView(
+              child: Center(
+                child: Column(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: company != null
+                          ? Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ListTile(
+                                title: Text(company.name),
+                                subtitle: Column(
+                                  children: [
+                                    Text(company.description),
+                                    Row(
+                                      children: [
+                                        IconButton(
+                                          onPressed: () {
+                                            BlocProvider.of<CompanyBloc>(
+                                                    context)
+                                                .add(CompanyDelete(
+                                                    company.id.toString()));
+                                            context.goNamed("home");
+                                          },
+                                          icon: const Icon(Icons.delete),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {},
+                                          child: const Text("apply"),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          )
-                        : const Text("woops no Company!"),
-                  )
-                ],
+                            )
+                          : const Text("woops no Company!"),
+                    )
+                  ],
+                ),
               ),
             );
           }),

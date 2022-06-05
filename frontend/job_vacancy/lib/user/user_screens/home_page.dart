@@ -6,7 +6,6 @@ import 'package:job_vacancy/user/user_data_provider/route_controller.dart';
 import 'package:job_vacancy/user/user_screens/cards.dart';
 import 'package:job_vacancy/user/user_screens/jobs.dart';
 import 'package:job_vacancy/user/user_screens/profile_page/admin_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -39,11 +38,6 @@ class _HomePageState extends State<HomePage> {
   static bool islog = false;
   @override
   Widget build(BuildContext context) {
-    // setState(() {
-    //   isLoggedin().then((value) {
-    //     islog = value;
-    //   });
-    // });
     return FutureBuilder(
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
       BlocProvider.of<JobBloc>(context).add(JobLoad());
@@ -53,20 +47,10 @@ class _HomePageState extends State<HomePage> {
             IconButton(
               onPressed: () => GoRouter.of(context).goNamed("companies"),
               icon: const Icon(Icons.adobe_sharp),
+              tooltip: 'companies',
             ),
             const SizedBox(
               width: 10,
-            ),
-            IconButton(
-              onPressed: () => GoRouter.of(context).goNamed("login"),
-              icon: const Icon(Icons.pedal_bike),
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            IconButton(
-              onPressed: () => GoRouter.of(context).goNamed("admin"),
-              icon: const Icon(Icons.perm_contact_cal_sharp),
             ),
           ],
         ),

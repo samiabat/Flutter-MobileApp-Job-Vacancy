@@ -36,7 +36,6 @@ class Company extends Equatable {
     return _data;
   }
 
-
   @override
   String toString() =>
       'Company { id: $id, name: $name description: $description }';

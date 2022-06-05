@@ -70,11 +70,11 @@ class AdminPage extends StatelessWidget {
                   ),
                   ListTile(
                     title: const Text(
-                      "MyJobs",
+                      "Add Job",
                       style: TextStyle(color: Colors.black),
                     ),
                     leading: const Icon(Icons.notifications),
-                    onTap: () => context.goNamed('jobs'),
+                    onTap: () => context.goNamed('add_update'),
                   ),
                   ListTile(
                     title: const Text(
