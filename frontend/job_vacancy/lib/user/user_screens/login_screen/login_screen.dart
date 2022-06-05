@@ -40,7 +40,7 @@ class LoginPageState extends State<LoginPage> {
                 child: Column(
                   children: [
                     TextFormField(
-                        initialValue: 'samuel',
+                        initialValue: '',
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Please enter username';
