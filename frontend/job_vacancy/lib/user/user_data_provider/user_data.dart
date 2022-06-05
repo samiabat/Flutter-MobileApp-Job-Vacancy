@@ -13,26 +13,6 @@ class UserDataProvider {
   static const _baseUrl = 'http://127.0.0.1:8000';
   static var client = http.Client();
 
-  // Future<void> register(RegisterRequestModel userData) async {
-  //   final responce = await httpClient.post(
-  //     (Uri.parse('$_baseUrl/users/')),
-  //     headers: <String, String>{
-  //       'Content-Type': 'application/json;charset:utf-8',
-  //     },
-  //     body: jsonEncode(<String, dynamic>{
-  //       'username': userData.username,
-  //       'email': userData.email,
-  //       'password': userData.password,
-  //     }),
-  //   );
-
-  //   if (responce.statusCode == 200) {
-  //     return await RegisterRequestModel.fromJson(jsonDecode(responce.body));
-  //   } else {
-  //     throw Exception('Failed to Create the Acount');
-  //   }
-  // }
-
   Future<bool> login(
     LoginRequestModel model,
   ) async {
@@ -169,30 +149,43 @@ class UserDataProvider {
   }
 
   Future<void> updateUser(RegisterRequestModel userData) async {
-    final http.Response responce = await client.put(
-      Uri.parse('$_baseUrl/jobs/$userData/'),
-      headers: <String, String>{
-        'Content-Type': 'application/json;charset:utf-8',
-      },
-      body: jsonEncode(
-        <String, dynamic>{
-          'id': userData,
-          'username': userData.username,
-          'email': userData.email,
-          'password': userData.password,
-        },
-      ),
-    );
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+    };
 
-    if (responce.statusCode != 204) {
-      throw Exception('Failed to update course.');
-    }
+    var id = loginInfo.getid;
+    print(id);
+
+    await client.put(
+      Uri.parse("$_baseUrl/users/$id/"),
+      headers: requestHeaders,
+      body: jsonEncode(userData.toJson()),
+    );
   }
 }
 
 class LoginInfo extends ChangeNotifier {
   var _isLoggedin = false;
   var _role = false;
+  var _username = "";
+  var _email = "";
+  var _id = "";
+
+  get getusername => _username;
+  get getemail => _email;
+  get getid => _id;
+
+  set setid(String value) {
+    _id = value;
+  }
+
+  set setusername(String value) {
+    _username = value;
+  }
+
+  set setemail(String value) {
+    _email = value;
+  }
 
   get getrole => _role;
   set setrole(bool value) {
@@ -216,6 +209,9 @@ class LoginInfo extends ChangeNotifier {
     prefs.setString("role", role);
     prefs.setString("userid", id);
     prefs.setString("email", email);
+    setusername = name;
+    setemail = email;
+    setid = id;
   }
 
   void login(String access, String refresh) async {

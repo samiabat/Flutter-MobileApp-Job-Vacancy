@@ -32,8 +32,7 @@ class Profile extends StatelessWidget {
                               title: Text(user.username!),
                               trailing: TextButton(
                                 onPressed: () {
-                                  context.goNamed("register",
-                                      params: {"isEdit": "true"});
+                                  context.goNamed("updateprofile");
                                 },
                                 child: const Icon(
                                   Icons.edit,

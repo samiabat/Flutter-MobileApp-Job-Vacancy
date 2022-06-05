@@ -20,6 +20,7 @@ import 'package:job_vacancy/user/user_repository/user_repository_export.dart';
 import 'package:job_vacancy/user/user_screens/home_page.dart';
 import 'package:job_vacancy/user/user_screens/login_screen/login_screen.dart';
 import 'package:job_vacancy/user/user_screens/login_screen/register_screen.dart';
+import 'package:job_vacancy/user/user_screens/login_screen/update_profile.dart';
 import 'package:job_vacancy/user/user_screens/profile_page/admin_page.dart';
 import 'package:job_vacancy/user/user_screens/profile_page/logout.dart';
 import 'package:job_vacancy/user/user_screens/profile_page/manage_user.dart';
@@ -150,6 +151,12 @@ Future<void> main() async {
         path: '/add_update',
         builder: (BuildContext context, GoRouterState state) =>
             AddEditJobPage(),
+      ),
+      GoRoute(
+        name: "updateprofile",
+        path: '/updateprofile',
+        builder: (BuildContext context, GoRouterState state) =>
+            UpdateProfilePage(),
       ),
       GoRoute(
         name: "admin",

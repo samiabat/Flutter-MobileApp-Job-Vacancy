@@ -13,12 +13,20 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<UserLogin>((event, emit) async {
       try {
         final userData = await userRepository.login(event.user);
-        print("logggiinggg");
         await userRepository.getProfile();
-        print("profile calle");
         emit(UserLogggedInSuccess());
       } catch (_) {
         emit(UserLogggedInFailure());
+      }
+    });
+
+    on<AccountUpdate>((event, emit) async {
+      try {
+        await userRepository.updateUser(event.user);
+        await userRepository.getProfile();
+        emit(const UserLoadSuccess());
+      } catch (_) {
+        emit(UserLoadFailure());
       }
     });
 
@@ -61,7 +69,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       emit(UserLoading());
     });
     on<UserRegister>((event, emit) async {
-      final userData = await userRepository.createUser(event.user);
+      await userRepository.createUser(event.user);
       emit(UserRegisterSuccess());
     });
   }

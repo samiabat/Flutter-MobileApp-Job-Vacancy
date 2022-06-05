@@ -52,6 +52,7 @@ class AccountUpdate extends UserEvent {
   String toString() => 'User Updated {user: $user}';
 }
 
+
 class UserLogout extends UserEvent {
   @override
   List<Object?> get props => [];
