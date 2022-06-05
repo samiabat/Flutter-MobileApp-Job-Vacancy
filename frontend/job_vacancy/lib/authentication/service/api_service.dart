@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:job_vacancy/authentication/login/models/login_request_model.dart';
-import 'package:job_vacancy/authentication/login/models/login_responce_model.dart';
-import 'package:job_vacancy/authentication/registration/models/register_request_model.dart';
-import 'package:job_vacancy/authentication/registration/models/register_responce_model.dart';
 import 'package:job_vacancy/authentication/service/shared_service.dart';
+import 'package:job_vacancy/user/user_models/login_request_model.dart';
+import 'package:job_vacancy/user/user_models/login_response_model.dart';
+import 'package:job_vacancy/user/user_models/registeration_request.dart';
+import 'package:job_vacancy/user/user_models/registeration_response.dart';
 
 class APIService {
   static var client = http.Client();

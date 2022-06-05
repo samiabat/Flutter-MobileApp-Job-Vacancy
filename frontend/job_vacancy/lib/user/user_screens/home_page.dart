@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:job_vacancy/jobs/job_bloc_folder/job_bloc_export.dart';
-import 'package:job_vacancy/user/user_screens/admin_page/admin_page.dart';
+import 'package:job_vacancy/user/user_data_provider/route_controller.dart';
 import 'package:job_vacancy/user/user_screens/cards.dart';
 import 'package:job_vacancy/user/user_screens/jobs.dart';
+import 'package:job_vacancy/user/user_screens/profile_page/admin_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -34,16 +36,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  static bool islog = false;
   @override
   Widget build(BuildContext context) {
-    if (widget.refresh) {
-      setState(() {
-        BlocProvider.of<JobBloc>(context).add(JobLoad());
-      });
-    }
-    ;
+    // setState(() {
+    //   isLoggedin().then((value) {
+    //     islog = value;
+    //   });
+    // });
     return FutureBuilder(
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+      BlocProvider.of<JobBloc>(context).add(JobLoad());
       return Scaffold(
         appBar: AppBar(
           actions: [
@@ -56,7 +59,7 @@ class _HomePageState extends State<HomePage> {
             ),
             IconButton(
               onPressed: () => GoRouter.of(context).goNamed("login"),
-              icon: const Icon(Icons.login),
+              icon: const Icon(Icons.pedal_bike),
             ),
             const SizedBox(
               width: 10,
@@ -115,11 +118,20 @@ class _HomePageState extends State<HomePage> {
             }
           },
         ),
-        drawer: const AdminPage(),
+        drawer: loginInfo.getName
+            ? const AdminPage()
+            : const Center(child: Text("Please login")),
       );
     });
   }
 
-  //padding: EdgeInsets.fromLTRB(15, 140, 15, 10),
+  // Future<bool> isLoggedin() async {
+  //   var prefs = await SharedPreferences.getInstance();
+  //   var loggedin = prefs.getString("access") != null;
+
+  //   islog = loggedin;
+
+  //   return loggedin;
+  // }
 
 }

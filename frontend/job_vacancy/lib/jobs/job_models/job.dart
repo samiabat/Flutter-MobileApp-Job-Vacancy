@@ -8,9 +8,9 @@ Job jobJson(String str) => Job.fromJson(json.decode(str));
 @immutable
 class Job extends Equatable {
   Job({
-    required this.id,
+    this.id = 0,
     required this.title,
-    required this.poster,
+    this.poster = 4,
     required this.description,
     this.date_created = "",
     this.date_updated = "",
@@ -18,7 +18,7 @@ class Job extends Equatable {
 
   final int id;
   final String title;
-  final int poster;
+  int poster;
   final String description;
   String date_created;
   String date_updated;

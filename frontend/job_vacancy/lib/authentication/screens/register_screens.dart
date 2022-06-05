@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:job_vacancy/authentication/registration/models/register_request_model.dart';
 import 'package:job_vacancy/authentication/service/api_service.dart';
+import 'package:job_vacancy/user/user_models/registeration_request.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:snippet_coder_utils/ProgressHUD.dart';
 import 'package:snippet_coder_utils/hex_color.dart';

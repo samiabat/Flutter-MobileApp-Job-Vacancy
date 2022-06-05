@@ -1,9 +1,13 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
-import 'package:job_vacancy/user/user_data_provider/shared_service.dart';
-import 'package:job_vacancy/user/user_models/user_login_model.dart';
-import 'package:job_vacancy/user/user_models/user_login_response.dart';
-import 'package:job_vacancy/user/user_models/user_register.dart';
+import 'package:job_vacancy/user/user_data_provider/route_controller.dart';
+import 'package:job_vacancy/user/user_models/login_request_model.dart';
+import 'package:job_vacancy/user/user_models/login_response_model.dart';
+import 'package:job_vacancy/user/user_models/profile_model.dart';
+import 'package:job_vacancy/user/user_models/registeration_request.dart';
+import 'package:job_vacancy/user/user_models/registeration_response.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserDataProvider {
   static const _baseUrl = 'http://127.0.0.1:8000';
@@ -29,7 +33,7 @@ class UserDataProvider {
   //   }
   // }
 
-  static Future<bool> login(
+  Future<bool> login(
     LoginRequestModel model,
   ) async {
     Map<String, String> requestHeaders = {
@@ -43,15 +47,71 @@ class UserDataProvider {
     );
 
     if (response.statusCode == 200) {
-      await SharedService.login(
-        loginResponseJson(
-          response.body,
-        ),
-      );
-
+      var loginResponse = loginResponseJson(response.body);
+      loginInfo.login(loginResponse.access, loginResponse.refresh);
       return true;
     } else {
       return false;
+    }
+  }
+
+  Future<bool> getProfile() async {
+    var tk = await SharedPreferences.getInstance();
+    String? token = tk.getString("access");
+
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+
+    var response = await client.get(Uri.parse('$_baseUrl/profile/'),
+        headers: requestHeaders);
+
+    if (response.statusCode == 200) {
+      var profileResponce = profileJson(response.body);
+      loginInfo.register(profileResponce.user, profileResponce.role,
+          profileResponce.id, profileResponce.email);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<RegisterRequestModel> userById(String? id) async {
+    var tk = await SharedPreferences.getInstance();
+    String? token = tk.getString("access");
+
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+    final responce = await client.get(Uri.parse('$_baseUrl/users/$id/'),
+        headers: requestHeaders);
+
+    if (responce.statusCode == 200) {
+      final user = jsonDecode(responce.body);
+      return RegisterRequestModel.fromJson(user);
+    } else {
+      throw Exception('Failed load jobs');
+    }
+  }
+
+  Future<List<RegisterRequestModel>> getUsers() async {
+    var tk = await SharedPreferences.getInstance();
+    String? token = tk.getString("access");
+
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+    final responce = await client.get(Uri.parse('$_baseUrl/users/'),
+        headers: requestHeaders);
+
+    if (responce.statusCode == 200) {
+      final users = jsonDecode(responce.body) as List;
+      return users.map((user) => RegisterRequestModel.fromJson(user)).toList();
+    } else {
+      throw Exception('Failed load jobs');
     }
   }
 
@@ -64,18 +124,47 @@ class UserDataProvider {
     );
     if (responce.statusCode != 204) {
       throw Exception('Failed to delete !');
+    } else {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.clear();
     }
+  }
+
+  Future<void> logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    try {
+      prefs.remove("access");
+      prefs.remove("refresh");
+    } catch (_) {}
+  }
+
+  Future<RegisterResponseModel> register(
+    RegisterRequestModel model,
+  ) async {
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+    };
+
+    var response = await client.post(
+      Uri.parse("$_baseUrl/users/"),
+      headers: requestHeaders,
+      body: jsonEncode(model.toJson()),
+    );
+
+    return registerResponseJson(
+      response.body,
+    );
   }
 
   Future<void> updateUser(RegisterRequestModel userData) async {
     final http.Response responce = await client.put(
-      Uri.parse('$_baseUrl/jobs/${userData.id}/'),
+      Uri.parse('$_baseUrl/jobs/$userData/'),
       headers: <String, String>{
         'Content-Type': 'application/json;charset:utf-8',
       },
       body: jsonEncode(
         <String, dynamic>{
-          'id': userData.id,
+          'id': userData,
           'username': userData.username,
           'email': userData.email,
           'password': userData.password,
@@ -86,5 +175,44 @@ class UserDataProvider {
     if (responce.statusCode != 204) {
       throw Exception('Failed to update course.');
     }
+  }
+}
+
+class LoginInfo extends ChangeNotifier {
+  var _isLoggedin = false;
+
+  get getName => _isLoggedin;
+  set setName(bool value) {
+    _isLoggedin = value;
+    notifyListeners();
+  }
+
+  Future<String?> log() async {
+    var prefs = await SharedPreferences.getInstance();
+    return prefs.getString("access");
+  }
+
+  void register(String name, String role, String id, String email) async {
+    var prefs = await SharedPreferences.getInstance();
+    prefs.setString("username", name);
+    prefs.setString("role", role);
+    prefs.setString("userid", id);
+    prefs.setString("email", email);
+  }
+
+  void login(String access, String refresh) async {
+    var prefs = await SharedPreferences.getInstance();
+    prefs.setString("access", access);
+    prefs.setString("refresh", refresh);
+    setName = true;
+  }
+
+  void logout() async {
+    var prefs = await SharedPreferences.getInstance();
+    try {
+      prefs.remove("access");
+      prefs.remove("refresh");
+      setName = false;
+    } catch (_) {}
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:job_vacancy/user/user_models/user_login_response.dart';
+import 'package:job_vacancy/authentication/login/models/login_responce_model.dart';
+import 'package:job_vacancy/user/user_models/login_response_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedService {

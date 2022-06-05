@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../job_models/job_model.dart';
 
 class JobDataProvider {
@@ -9,8 +10,11 @@ class JobDataProvider {
   JobDataProvider({required this.httpClient});
 
   Future<Job> createJob(Job job) async {
+    var tk = await SharedPreferences.getInstance();
+    String? token = tk.getString("access");
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
     };
 
     var response = await httpClient.post(
@@ -25,7 +29,16 @@ class JobDataProvider {
   }
 
   Future<List<Job>> getJobs() async {
-    final responce = await httpClient.get(Uri.parse('$_baseUrl/jobs/'));
+    var tk = await SharedPreferences.getInstance();
+    String? token = tk.getString("access");
+
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+    final responce = await httpClient.get(Uri.parse('$_baseUrl/jobs/'),
+        headers: requestHeaders);
+
     if (responce.statusCode == 200) {
       final jobs = jsonDecode(responce.body) as List;
       return jobs.map((job) => Job.fromJson(job)).toList();
@@ -35,11 +48,16 @@ class JobDataProvider {
   }
 
   Future<void> deleteJob(String id) async {
+    var tk = await SharedPreferences.getInstance();
+    String? token = tk.getString("access");
+
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
     final http.Response responce = await httpClient.delete(
-      Uri.parse(_baseUrl + '/jobs/$id/'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
+      Uri.parse('$_baseUrl/jobs/$id/'),
+      headers: requestHeaders,
     );
     if (responce.statusCode != 204) {
       throw Exception('Failed to delete !');

@@ -1,21 +1,52 @@
-// import 'package:flutter/widgets.dart';
-// import 'package:flutter_test/flutter_test.dart';
-// import 'package:job_vacancy/main.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
+import 'package:job_vacancy/main.dart';
+import 'package:job_vacancy/user/user_screens/login_screen/login_screen.dart';
+import 'package:job_vacancy/user/user_screens/profile_page/about.dart';
 
-// void main() {
-//   testWidgets('resync stateful widget', (WidgetTester tester) async {
-//     const Key homeKey = Key('inner');
-//     MyApp main = MyApp(key: homeKey);
+void main() {
+  group("Widget tesing", () {
+    final aboutRoute = GoRouter(
+      routes: <GoRoute>[
+        GoRoute(
+            name: "about",
+            path: '/about',
+            pageBuilder: (BuildContext context, GoRouterState state) {
+              return MaterialPage(
+                key: state.pageKey,
+                child: const Aboutpage(),
+              );
+            }),
+      ],
+    );
 
-//     await tester.pumpWidget(MyApp());
-//     final StatefulElement innerElement = tester.element(find.byKey(homeKey));
-//     final _MyAppState innerElementState = innerElement.state as _MyAppState;
+    final logoutRoute = GoRouter(routes: <GoRoute>[
+      GoRoute(
+        name: "login",
+        path: '/Login',
+        pageBuilder: (BuildContext context, GoRouterState state) {
+          return MaterialPage(
+            key: state.pageKey,
+            child: const LoginPage(),
+          );
+        },
+      )
+    ]);
 
-//     expect(innerElementState.widget, equals(main));
-//     // expect(innerElementState.didInitState, isTrue);
+// About
+    testWidgets("logout testing", (tester) async {
+      await tester.pumpWidget(MyApp(router: logoutRoute));
+      final button = find.byType(GoRouter);
+      await tester.pump();
+      expect(button, findsNothing);
+    });
 
-//     // await tester.pump();
-//     // expect(tester.element(find.byKey(homeKey)), equals(innerElement));
-//     // expect(innerElement.state, equals(innerElementState));
-//   });
-// }
+    testWidgets("About page widget testing", (tester) async {
+      await tester.pumpWidget(MyApp(router: aboutRoute));
+      final text = find.text("About");
+      await tester.pump();
+      expect(text, findsNothing);
+    });
+  });
+}

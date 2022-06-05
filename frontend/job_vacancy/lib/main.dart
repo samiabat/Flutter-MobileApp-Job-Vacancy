@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
-import 'package:job_vacancy/authentication/screens/login_screens.dart';
-import 'package:job_vacancy/authentication/screens/register_screens.dart';
+// import 'package:job_vacancy/authentication/screens/register_screens.dart';
 import 'package:job_vacancy/company/company_models/company_model.dart';
 import 'package:job_vacancy/company/company_screens/company_add_update.dart';
 import 'package:job_vacancy/company/company_screens/company_detail.dart';
@@ -12,14 +11,21 @@ import 'package:job_vacancy/jobs/job_data_provider/job_data_provider.dart';
 import 'package:job_vacancy/jobs/job_repository/job_repository_export.dart';
 import 'package:job_vacancy/jobs/job_screens/job_add_update.dart';
 import 'package:job_vacancy/jobs/job_screens/job_detail.dart';
-import 'package:job_vacancy/login_info.dart';
-import 'package:job_vacancy/user/user_screens/admin_page/about.dart';
-import 'package:job_vacancy/user/user_screens/admin_page/admin_page.dart';
-import 'package:job_vacancy/user/user_screens/admin_page/logout.dart';
-import 'package:job_vacancy/user/user_screens/admin_page/manage_user.dart';
-import 'package:job_vacancy/user/user_screens/admin_page/profile.dart';
-import 'package:job_vacancy/user/user_screens/admin_page/splash.dart';
+import 'package:job_vacancy/user/user_bloc_folder/user/bloc/user_bloc.dart';
+import 'package:job_vacancy/user/user_bloc_folder/user/bloc/user_event.dart';
+import 'package:job_vacancy/user/user_data_provider/route_controller.dart';
+import 'package:job_vacancy/user/user_data_provider/user_data_provider.dart';
+import 'package:job_vacancy/user/user_models/registeration_request.dart';
+import 'package:job_vacancy/user/user_repository/user_repository_export.dart';
 import 'package:job_vacancy/user/user_screens/home_page.dart';
+import 'package:job_vacancy/user/user_screens/login_screen/login_screen.dart';
+import 'package:job_vacancy/user/user_screens/login_screen/register_screen.dart';
+import 'package:job_vacancy/user/user_screens/profile_page/admin_page.dart';
+import 'package:job_vacancy/user/user_screens/profile_page/logout.dart';
+import 'package:job_vacancy/user/user_screens/profile_page/manage_user.dart';
+import 'package:job_vacancy/user/user_screens/profile_page/profile.dart';
+import 'package:job_vacancy/user/user_screens/profile_page/splash.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'company/company_bloc_folder/company_bloc_export.dart';
 import 'company/company_data_provider/company_data_provider_export.dart';
@@ -30,21 +36,18 @@ import 'jobs/job_models/job.dart';
 import 'jobs/job_screens/job_list..dart';
 
 Future<void> main() async {
-  final loginInfo = LoginInfo();
-
-  bool isLogged = false;
-  final GoRouter _router = GoRouter(
+  final _router = GoRouter(
     initialLocation: '/',
     redirect: (state) {
-      final isLoggedin = loginInfo.loggedIn.then((value) => {isLogged = value});
+      final isLogged = loginInfo.getName;
       final isLogging = state.location == '/login';
+
       final isRegistering = state.location == '/register';
-      // if (isLogged) return '/home';
-      if (!isLogged && !isLogging && !isRegistering) {
-        return '/login';
-      }
-      if (isLogged && isRegistering) return '/home';
+
+      if (!isLogged && !isLogging && !isRegistering) return '/login';
+
       if (isLogged && isLogging) return '/home';
+      if (isLogged && isRegistering) return '/home';
       return null;
     },
     refreshListenable: loginInfo,
@@ -61,14 +64,20 @@ Future<void> main() async {
             HomePage(title: "Home Page"),
         routes: [
           GoRoute(
-              name: "profile",
-              path: 'profile',
-              pageBuilder: (BuildContext context, GoRouterState state) {
-                return MaterialPage(
-                  key: state.pageKey,
-                  child: const Profile(),
-                );
-              }),
+            name: "profile",
+            path: 'profile',
+            pageBuilder: (context, state) {
+              final user = MyApp._fromUser();
+              final id = MyApp._thisId();
+              return MaterialPage(
+                key: state.pageKey,
+                child: Profile(
+                  user: user,
+                  id: id,
+                ),
+              );
+            },
+          ),
           GoRoute(
               name: "manageuser",
               path: 'manageuser',
@@ -76,15 +85,6 @@ Future<void> main() async {
                 return MaterialPage(
                   key: state.pageKey,
                   child: const ManageUserpage(),
-                );
-              }),
-          GoRoute(
-              name: "about",
-              path: 'about',
-              pageBuilder: (BuildContext context, GoRouterState state) {
-                return MaterialPage(
-                  key: state.pageKey,
-                  child: const Aboutpage(),
                 );
               }),
           GoRoute(
@@ -149,7 +149,7 @@ Future<void> main() async {
         name: "add_update",
         path: '/add_update',
         builder: (BuildContext context, GoRouterState state) =>
-            const AddJobPage(),
+            AddEditJobPage(),
       ),
       GoRoute(
         name: "admin",
@@ -159,12 +159,14 @@ Future<void> main() async {
       GoRoute(
         name: "login",
         path: '/login',
-        builder: (BuildContext context, GoRouterState state) => LoginPage(),
+        builder: (BuildContext context, GoRouterState state) =>
+            const LoginPage(),
       ),
       GoRoute(
         name: "register",
         path: '/register',
-        builder: (BuildContext context, GoRouterState state) => RegisterPage(),
+        builder: (BuildContext context, GoRouterState state) =>
+            const RegisterPage(),
       ),
     ],
   );
@@ -174,6 +176,10 @@ Future<void> main() async {
     dataProvider: JobDataProvider(
       httpClient: http.Client(),
     ),
+  );
+
+  final UserRepository userRepository = UserRepository(
+    dataProvider: UserDataProvider(),
   );
 
   final CompanyRepository companyRepository = CompanyRepository(
@@ -193,6 +199,10 @@ Future<void> main() async {
           create: (BuildContext context) =>
               CompanyBloc(companyRepository: companyRepository)
                 ..add(const CompanyLoad()),
+        ),
+        BlocProvider<UserBloc>(
+          create: (BuildContext context) =>
+              UserBloc(userRepository: userRepository)..add(UserLogging()),
         ),
         // BlocProvider<BlocC>(
         //   create: (BuildContext context) => BlocC(),
@@ -221,6 +231,12 @@ class MyApp extends StatefulWidget {
     return job;
   }
 
+  // static Future<UserRegister> profile(String? id) async {
+  //   final UserRepository userRepository =
+  //       UserRepository(dataProvider: UserDataProvider());
+  //   return await userRepository.getProfile();
+  // }
+
   static Future<Company> _fromCompany(String? id) async {
     final CompanyRepository companyRepository = CompanyRepository(
       dataProvider: CompanyDataProvider(
@@ -232,6 +248,22 @@ class MyApp extends StatefulWidget {
         .where((company) => company.id.toString() == id.toString())
         .first;
     return company;
+  }
+
+  static Future<RegisterRequestModel> _fromUser() async {
+    final UserRepository userRepository = UserRepository(
+      dataProvider: UserDataProvider(),
+    );
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    var id = sp.getString("userid");
+    final user = await userRepository.userById(id);
+    return user;
+  }
+
+  static Future<String> _thisId() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    final String? id = sp.getString("userid");
+    return id!;
   }
 }
 

@@ -18,3 +18,4 @@ class LoginRequestModel {
     return _data;
   }
 }
+

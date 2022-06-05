@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:job_vacancy/user/user_models/registeration_request.dart';
 
 class UserState extends Equatable {
   const UserState();
@@ -10,13 +11,24 @@ class UserState extends Equatable {
 class UserLoading extends UserState {}
 
 class UserLogggedInSuccess extends UserState {
-  final String token;
+  @override
+  List<Object> get props => [];
+}
 
-  const UserLogggedInSuccess([this.token = ""]);
+class UserLoadedById extends UserState {}
+
+class UserLoadSuccess extends UserState {
+  final List<RegisterRequestModel> users;
+
+  const UserLoadSuccess([this.users = const []]);
 
   @override
-  List<Object> get props => [token];
+  List<Object> get props => [users];
 }
+
+class UserLoadFailure extends UserState {}
+
+class UserLogoutSuccess extends UserState {}
 
 class UserLogggedInFailure extends UserState {}
 

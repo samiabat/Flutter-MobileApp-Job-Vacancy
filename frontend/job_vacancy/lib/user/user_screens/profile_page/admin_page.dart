@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:job_vacancy/login_info.dart';
+import 'package:job_vacancy/user/user_bloc_folder/user/bloc/user_bloc.dart';
+import 'package:job_vacancy/user/user_bloc_folder/user/bloc/user_event.dart';
+import 'package:job_vacancy/user/user_data_provider/route_controller.dart';
 
 class Admin extends StatelessWidget {
   const Admin({Key? key}) : super(key: key);
@@ -51,30 +54,6 @@ class AdminPage extends StatelessWidget {
             const SizedBox(
               height: 25,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                const Icon(
-                  Icons.person,
-                  size: 42,
-                  color: Colors.amber,
-                ),
-                Column(
-                  children: <Widget>[
-                    Container(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: const Text("Admin-Page",
-                            style:
-                                TextStyle(fontSize: 22, color: Colors.amber))),
-                    Container(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: const Text("Admin-Page",
-                            style:
-                                TextStyle(fontSize: 16, color: Colors.amber))),
-                  ],
-                )
-              ],
-            ),
             Container(
               height: MediaQuery.of(context).size.height,
               color: Colors.white,
@@ -90,21 +69,40 @@ class AdminPage extends StatelessWidget {
                     onTap: () => context.goNamed('profile'),
                   ),
                   ListTile(
+                    title: const Text(
+                      "MyJobs",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    leading: const Icon(Icons.notifications),
+                    onTap: () => context.goNamed('jobs'),
+                  ),
+                  ListTile(
+                    title: const Text(
+                      "MyCompanies",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    leading: const Icon(Icons.notifications),
+                    onTap: () => context.goNamed('companies'),
+                  ),
+                  ListTile(
+                    title: const Text(
+                      "Jobs Applied",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    leading: const Icon(Icons.notifications),
+                    onTap: () => context.goNamed('jobs'),
+                  ),
+                  ListTile(
                     dense: true,
                     title: const Text(
                       "ManageUser",
                       style: TextStyle(color: Colors.black),
                     ),
                     leading: const Icon(Icons.person),
-                    onTap: () => context.goNamed('manageuser'),
-                  ),
-                  ListTile(
-                    title: const Text(
-                      "About",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    leading: const Icon(Icons.notifications),
-                    onTap: () => context.goNamed('about'),
+                    onTap: () {
+                      BlocProvider.of<UserBloc>(context).add(UserLoad());
+                      context.goNamed("manageuser");
+                    },
                   ),
                   ListTile(
                     dense: true,
@@ -114,7 +112,9 @@ class AdminPage extends StatelessWidget {
                     ),
                     leading: const Icon(Icons.logout),
                     onTap: () async {
-                      LoginInfo().logout();
+                      loginInfo.logout();
+                      // BlocProvider.of<UserBloc>(context).add(UserLogout());
+                      context.goNamed("login");
                     },
                   ),
                 ],

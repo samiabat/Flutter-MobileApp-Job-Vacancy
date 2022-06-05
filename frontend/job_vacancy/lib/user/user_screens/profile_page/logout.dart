@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:job_vacancy/login_info.dart';
+import 'package:job_vacancy/user/user_data_provider/user_data_provider.dart';
+import 'package:job_vacancy/user/user_data_provider/route_controller.dart';
 
 class Logoutpage extends StatefulWidget {
   const Logoutpage({Key? key}) : super(key: key);
@@ -15,8 +16,7 @@ class _LogoutpageState extends State<Logoutpage> {
       body: Center(
         child: IconButton(
             onPressed: () async {
-              var logininfo = LoginInfo();
-              logininfo.logout();
+              loginInfo.logout();
             },
             icon: const Icon(Icons.logout)),
       ),

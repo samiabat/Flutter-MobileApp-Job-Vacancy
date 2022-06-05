@@ -43,6 +43,7 @@ dependencies:
   animated_splash_screen: ^1.2.0
   shared_preferences: ^2.0.15
   api_cache_manager: ^1.0.2
+  integration_test: ^0.8.1
   snippet_coder_utils: ^1.0.12
 
 dev_dependencies:
@@ -51,7 +52,7 @@ dev_dependencies:
   test: 
   bloc_test:
   mockito:
-  integration_test:
+  
 
 
 

@@ -7,7 +7,7 @@ class Page1Screen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Text("Hello page1"),
+      body: const Text("Hello"),
       floatingActionButton: FloatingActionButton(
         onPressed: () => GoRouter.of(context).goNamed("jobs"),
         child: const Icon(Icons.add_circle),

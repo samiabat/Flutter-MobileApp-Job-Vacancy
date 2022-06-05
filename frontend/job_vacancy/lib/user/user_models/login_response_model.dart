@@ -15,11 +15,4 @@ class LoginResponseModel {
     access = json["access"];
     refresh = json["refresh"];
   }
-
-  // Map<String, dynamic> toJson() {
-  //   final _data = <String, dynamic>{};
-  //   _data['access'] = access;
-  //   _data['refresh'] = refresh;
-  //   return _data;
-  // }
 }
