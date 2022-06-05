@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:job_vacancy/user/user_bloc_folder/user/bloc/user_bloc.dart';
+import 'package:job_vacancy/user/user_bloc_folder/user/bloc/user_event.dart';
 import 'package:job_vacancy/user/user_bloc_folder/user/bloc/user_state.dart';
 import 'package:job_vacancy/user/user_models/registeration_request.dart';
 
@@ -74,11 +75,14 @@ class _ManageUserpageState extends State<ManageUserpage> {
             child: Text(users.username!,
                 style: const TextStyle(fontWeight: FontWeight.bold)),
           ),
-          leading: const Icon(
-            Icons.person,
-            color: Colors.black,
-          ),
-          trailing: const Icon(Icons.delete, color: Colors.red),
+          leading: const Icon(Icons.person),
+          trailing: IconButton(
+              onPressed: () => BlocProvider.of<UserBloc>(context)
+                  .add(DeleteByUsername(users.username!)),
+              icon: const Icon(
+                Icons.delete,
+                color: Colors.red,
+              )),
         ),
       ),
     );

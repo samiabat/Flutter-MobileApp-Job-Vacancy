@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:job_vacancy/user/user_bloc_folder/user/bloc/user_bloc.dart';
-import 'package:job_vacancy/user/user_bloc_folder/user/bloc/user_event.dart';
 import 'package:job_vacancy/user/user_data_provider/user_data_provider.dart';
 import 'package:job_vacancy/user/user_models/registeration_request.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+  bool isEdit;
+  RegisterPage({Key? key, this.isEdit = false}) : super(key: key);
 
   @override
   RegisterPageState createState() => RegisterPageState();
@@ -42,6 +40,7 @@ class RegisterPageState extends State<RegisterPage> {
                 child: Column(
                   children: [
                     TextFormField(
+                        initialValue: "",
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Please enter username';

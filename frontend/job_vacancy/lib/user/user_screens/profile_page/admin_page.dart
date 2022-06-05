@@ -100,8 +100,10 @@ class AdminPage extends StatelessWidget {
                     ),
                     leading: const Icon(Icons.person),
                     onTap: () {
-                      BlocProvider.of<UserBloc>(context).add(UserLoad());
-                      context.goNamed("manageuser");
+                      if (loginInfo.getrole) {
+                        BlocProvider.of<UserBloc>(context).add(UserLoad());
+                        context.goNamed("manageuser");
+                      } else {}
                     },
                   ),
                   ListTile(

@@ -32,6 +32,10 @@ class UserRepository {
     return await dataProvider.userById(id);
   }
 
+  Future<void> deleteByUsername(String? username) async {
+    return await dataProvider.deleteByUsername(username!);
+  }
+
   Future<void> logout() async {
     await dataProvider.logout();
   }

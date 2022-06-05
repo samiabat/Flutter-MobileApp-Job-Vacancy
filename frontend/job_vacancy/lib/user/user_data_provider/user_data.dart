@@ -115,6 +115,18 @@ class UserDataProvider {
     }
   }
 
+  Future<void> deleteByUsername(String username) async {
+    final http.Response responce = await client.delete(
+      Uri.parse('$_baseUrl/users/$username/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+    if (responce.statusCode != 204) {
+      throw Exception('Failed to delete !');
+    }
+  }
+
   Future<void> deleteAccount(String id) async {
     final http.Response responce = await client.delete(
       Uri.parse('$_baseUrl/users/$id/'),
@@ -180,6 +192,12 @@ class UserDataProvider {
 
 class LoginInfo extends ChangeNotifier {
   var _isLoggedin = false;
+  var _role = false;
+
+  get getrole => _role;
+  set setrole(bool value) {
+    _role = value;
+  }
 
   get getName => _isLoggedin;
   set setName(bool value) {
@@ -204,6 +222,9 @@ class LoginInfo extends ChangeNotifier {
     var prefs = await SharedPreferences.getInstance();
     prefs.setString("access", access);
     prefs.setString("refresh", refresh);
+    try {
+      setrole = prefs.getBool("role")!;
+    } catch (_) {}
     setName = true;
   }
 

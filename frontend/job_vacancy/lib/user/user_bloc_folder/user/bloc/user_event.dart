@@ -25,7 +25,7 @@ class UserLogin extends UserEvent {
   List<Object> get props => [user];
 
   @override
-  String toString() => 'Job Created {course: $user}';
+  String toString() => 'Job Created {user: $user}';
 }
 
 class UserRegister extends UserEvent {
@@ -37,7 +37,7 @@ class UserRegister extends UserEvent {
   List<Object> get props => [user];
 
   @override
-  String toString() => 'User Created {course: $user}';
+  String toString() => 'User Created {user: $user}';
 }
 
 class AccountUpdate extends UserEvent {
@@ -49,7 +49,7 @@ class AccountUpdate extends UserEvent {
   List<Object> get props => [user];
 
   @override
-  String toString() => 'User Updated {course: $user}';
+  String toString() => 'User Updated {user: $user}';
 }
 
 class UserLogout extends UserEvent {
@@ -69,7 +69,19 @@ class AccountDelete extends UserEvent {
   List<Object> get props => [id];
 
   @override
-  toString() => 'User Deleted {course: $id}';
+  toString() => 'User Deleted {user: $id}';
+}
+
+class DeleteByUsername extends UserEvent {
+  final String username;
+
+  const DeleteByUsername(this.username);
+
+  @override
+  List<Object> get props => [username];
+
+  @override
+  toString() => 'User Deleted {usename: $username}';
 }
 
 class UserLoadById extends UserEvent {
@@ -80,5 +92,5 @@ class UserLoadById extends UserEvent {
   List<Object> get props => [id];
 
   @override
-  toString() => 'User Loaded {course: $id}';
+  toString() => 'User Loaded {user: $id}';
 }

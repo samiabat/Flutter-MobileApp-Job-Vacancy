@@ -165,8 +165,7 @@ Future<void> main() async {
       GoRoute(
         name: "register",
         path: '/register',
-        builder: (BuildContext context, GoRouterState state) =>
-            const RegisterPage(),
+        builder: (BuildContext context, GoRouterState state) => RegisterPage(),
       ),
     ],
   );
@@ -263,6 +262,7 @@ class MyApp extends StatefulWidget {
   static Future<String> _thisId() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     final String? id = sp.getString("userid");
+    print(id);
     return id!;
   }
 }

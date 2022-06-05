@@ -15,7 +15,7 @@ void main() {
             pageBuilder: (BuildContext context, GoRouterState state) {
               return MaterialPage(
                 key: state.pageKey,
-                child: const Aboutpage(),
+                child: Container(),
               );
             }),
       ],

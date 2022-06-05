@@ -30,6 +30,16 @@ class Profile extends StatelessWidget {
                             padding: const EdgeInsets.all(8.0),
                             child: ListTile(
                               title: Text(user.username!),
+                              trailing: TextButton(
+                                onPressed: () {
+                                  context.goNamed("register",
+                                      params: {"isEdit": "true"});
+                                },
+                                child: const Icon(
+                                  Icons.edit,
+                                  color: Colors.grey,
+                                ),
+                              ),
                               subtitle: Column(
                                 children: [
                                   Text(user.email!),
@@ -48,7 +58,7 @@ class Profile extends StatelessWidget {
                               ),
                             ),
                           )
-                        : const Text("woops no job!"),
+                        : const Text("Internal sever error"),
                   )
                 ],
               ),
