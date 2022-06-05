@@ -12,9 +12,9 @@ class Job(models.Model):
 class Company(models.Model):
     name = models.CharField(max_length=30, null=True)
     description = models.TextField(null=True, blank=True)
-    follower = models.ForeignKey(User, on_delete=models.CASCADE)
-    job = models.ForeignKey(Job, on_delete=models.CASCADE)
-    logo = models.ImageField()
+    # follower = models.ForeignKey(User, on_delete=models.CASCADE)
+    # job = models.ForeignKey(Job, on_delete=models.CASCADE)
+    # logo = models.ImageField()
 
 
 class Report(models.Model):

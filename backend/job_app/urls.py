@@ -14,6 +14,8 @@ urlpatterns = [
     path('profile/', views.profileApi),
     path('users/', views.userApi),
     path('users/<str:pk>/', views.userApi),
+    path('companies/', views.companyApi),
+    path('companies/<str:pk>/', views.companyApi),
     path('jobs/', views.jobApi),
     path('jobs/<str:pk>/', views.jobApi),
     path('api/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
